@@ -4,9 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import MovieCard.MovieCard;
-import MovieCard.MovieInfo;
-
 import java.awt.Color;
 import javax.swing.UIManager;
 
@@ -117,15 +114,7 @@ public class Mainframe extends JFrame {
 		panel_1.setMaximumSize(scrollPane.getSize());
 		panel_1.setLayout(new GridLayout(0, 3, 4, 4));
 		
-		panel_1.add(new MovieCard(new MovieInfo("test1")));
-		panel_1.add(new MovieCard(new MovieInfo("test2")));
-		panel_1.add(new MovieCard(new MovieInfo("test3")));
-		panel_1.add(new MovieCard(new MovieInfo("test4")));
-		panel_1.add(new MovieCard(new MovieInfo("test5")));
-		for (int i = 0; i < 10; i++) {
-			MovieCard movieCard = new MovieCard(new MovieInfo("test"+(i+6), i+"h", 2024));
-			panel_1.add(movieCard);
-		}
+		MovieManager.getInstance().generateMovieCards(panel_1);
 		
 		JPanel footer = new JPanel();
 		footer.setBorder(new EmptyBorder(4, 0, 0, 0));
