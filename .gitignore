@@ -1,6 +1,8 @@
 /.git/
 /bin/
 
+example_data.csv
+
 # Compiled class file
 *.class
 
