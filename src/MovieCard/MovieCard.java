@@ -30,6 +30,7 @@ public class MovieCard extends JPanel {
 		JPanel image = new JPanel();
 		image.setPreferredSize(new Dimension(10, 60));
 		image.setMinimumSize(new Dimension(10, 60));
+		image.setBackground(new Color(24, 24, 27));
 		add(image);
 
 		createTitle();
