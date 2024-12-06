@@ -50,7 +50,9 @@ public class MovieCard extends JPanel {
 		titleLine.setOpaque(false);
 		this.add(titleLine);
 		
-		JLabel titleText = new JLabel(info.getName());
+		String filteredTitle = info.getName();
+		filteredTitle = filteredTitle.substring(0, Math.min(10, filteredTitle.length()));
+		JLabel titleText = new JLabel(filteredTitle);
 		titleText.setFont(new Font("Arial", Font.BOLD, 16));
 		titleText.setForeground(new Color(250, 250, 250));
 		titleLine.add(titleText);
@@ -73,6 +75,7 @@ public class MovieCard extends JPanel {
 	}
 
 	protected void createDuration() {
+		if (info.getDurationMins() == 0) return;
 		JPanel durationLine = new JPanel();
 		FlowLayout fl_duration = (FlowLayout) durationLine.getLayout();
 		fl_duration.setVgap(0);
@@ -118,6 +121,7 @@ public class MovieCard extends JPanel {
 	}
 	
 	protected void createRating() {
+		if (info.getRate() == 0) return;
 		JPanel rating = new JPanel();
 		rating.setBorder(new EmptyBorder(0, 0, 3, 0));
 		FlowLayout flowLayout = (FlowLayout) rating.getLayout();
