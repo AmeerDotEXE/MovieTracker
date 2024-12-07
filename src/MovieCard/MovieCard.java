@@ -8,8 +8,12 @@ import java.awt.FlowLayout;
 import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 
+import Components.ImagePanel;
 import Components.RoundedPanel;
 import MovieTracker.Theme;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.SwingConstants;
 
 
 public class MovieCard extends JPanel {
@@ -20,7 +24,9 @@ public class MovieCard extends JPanel {
 	Theme theme; // for easy access
 
 	/**
-	 * Create the panel.
+	 * @wbp.eval.method.parameter info new MovieInfo("The Terminator")
+	 * @wbp.eval.method.parameter info2 new MovieInfo("The Terminator", 95, 2025)
+	 * @wbp.eval.method.parameter info3 new MovieInfo("Pirates of the Caribbean: The Curse of the Black Pearl", 95, 2025)
 	 */
 	public MovieCard(MovieInfo info) {
 		this.info = info;
@@ -29,11 +35,17 @@ public class MovieCard extends JPanel {
 		
 		setBorder(new EmptyBorder(6, 6, 6, 6));
 		setBackground(theme.cardBG);
+		Dimension cardSize = new Dimension((16*8)+12, 192);
+		setPreferredSize(cardSize);
+		setMinimumSize(new Dimension(128, 192));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JPanel image = new JPanel();
-		image.setPreferredSize(new Dimension(10, 60));
-		image.setMinimumSize(new Dimension(10, 60));
+		ImagePanel image = new ImagePanel(info.getImagePath());
+		image.setImagePosition(info.getImagePosition());
+		Dimension imgSize = new Dimension(16*8, 9*8);
+		image.setPreferredSize(imgSize);
+		image.setMaximumSize(imgSize);
+		image.setMinimumSize(new Dimension(16*8, 9*8));
 		image.setBackground(theme.applicationBG);
 		add(image);
 
@@ -44,23 +56,39 @@ public class MovieCard extends JPanel {
 
 		createYear();
 		createDuration();
+
+		Component verticalGlue = Box.createVerticalGlue();
+		add(verticalGlue);
 	}
 
 	protected void createTitle() {
 		JPanel titleLine = new JPanel();
 		FlowLayout fl_title = (FlowLayout) titleLine.getLayout();
-		fl_title.setVgap(4);
-		fl_title.setAlignment(FlowLayout.LEADING);
-		titleLine.setMaximumSize(new Dimension(32767, 10));
+		fl_title.setVgap(6);
+		fl_title.setHgap(6);
+		titleLine.setMaximumSize(new Dimension(32767, 28));
+		titleLine.setPreferredSize(new Dimension(32767, 28));
 		titleLine.setOpaque(false);
 		this.add(titleLine);
 		
-		String filteredTitle = info.getName();
-		filteredTitle = filteredTitle.substring(0, Math.min(10, filteredTitle.length()));
-		JLabel titleText = new JLabel(filteredTitle);
+		String originalTitle = info.getName();
+
+		JLabel titleText = new JLabel(originalTitle);
+		titleText.setHorizontalAlignment(SwingConstants.CENTER);
+		titleText.setVerticalAlignment(SwingConstants.TOP);
+		titleText.setPreferredSize(new Dimension(16*8, 18));
 		titleText.setFont(new Font("Arial", Font.BOLD, 16));
 		titleText.setForeground(theme.cardFG);
 		titleLine.add(titleText);
+		
+//		for (int i = 0; i < 3; i++) {
+//			int charsCut = (i+1)*14;
+//			if (charsCut > originalTitle.length()) charsCut = originalTitle.length();
+//			String filteredTitle = originalTitle.substring(i*14, charsCut) + "\n";
+//			
+//			
+//			if (charsCut == originalTitle.length()) break;
+//		}
 	}
 
 	protected void createYear() {
@@ -97,7 +125,7 @@ public class MovieCard extends JPanel {
 	
 	protected void createStatus() {
 		JPanel status = new JPanel();
-		status.setBorder(new EmptyBorder(0, 0, 6, 0));
+		status.setBorder(new EmptyBorder(2, 0, 6, 0));
 		FlowLayout flowLayout = (FlowLayout) status.getLayout();
 		flowLayout.setHgap(0);
 		flowLayout.setVgap(0);

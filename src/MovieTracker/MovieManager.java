@@ -19,6 +19,10 @@ public class MovieManager {
 		for (MovieInfo movie : db.getMovies()) {
 			parent.add(new MovieCard(movie));
 		}
+
+		for (MovieInfo movie : db.getMovies()) {
+			parent.add(new MovieCard(movie));
+		}
 		
 	}
 	public void generateMovieCardsOld(JPanel parent) {

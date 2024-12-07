@@ -13,7 +13,7 @@ public class DatabaseCSV implements Database {
 	private ArrayList<MovieInfo> movies = new ArrayList<MovieInfo>();
 	
 	DatabaseCSV() {
-		File csvFile = new File("example_data.csv");
+		File csvFile = new File("data.csv");
 		if (!csvFile.exists()) {
 			try {
 				csvFile.createNewFile();
@@ -43,15 +43,18 @@ public class DatabaseCSV implements Database {
 			if (line == "") continue;
 			String[] cells = parseCSVLine(line);
 
-			if (cells.length != 10) continue;
+			if (cells.length != 12) continue;
 			String name = cells[1];
 			MovieInfo movie;
 			if (cells[4] != "") {
 				int year = Integer.parseInt(cells[4]);
-				movie = new MovieInfo(name, 74, year);
+				int totalMins = MovieInfo.durationToMins(cells[3]);
+				movie = new MovieInfo(name, totalMins, year);
 			} else {
 				movie = new MovieInfo(name);
 			}
+			if (cells[10] != "") movie.setImagePath("movie-images/"+cells[10]);
+			if (cells[11] != "") movie.setImagePosition(Integer.parseInt(cells[11]));
 			movies.add(movie);
 		}
 		
