@@ -4,7 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.Color;
+import MovieTracker.MovieManager;
+import MovieTracker.Theme;
+
 import javax.swing.UIManager;
 
 import java.awt.FlowLayout;
@@ -49,13 +51,15 @@ public class Mainframe extends JFrame {
 	 * Create the frame.
 	 */
 	public Mainframe() {
-		setBackground(new Color(24, 24, 27));
+		Theme theme = Theme.getInstance();
+		
+		setBackground(theme.applicationBG);
 		setTitle("Movie Tracker");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(480, 360);
         setLocationRelativeTo(null);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(24, 24, 27));
+		contentPane.setBackground(theme.applicationBG);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
@@ -73,28 +77,28 @@ public class Mainframe extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnNewButton.setBackground(new Color(22, 163, 74));
+				btnNewButton.setBackground(theme.buttonSuccessHover);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(new Color(34, 197, 94));
+				btnNewButton.setBackground(theme.buttonSuccessBG);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				btnNewButton.setBackground(new Color(74, 222, 128));
+				btnNewButton.setBackground(theme.buttonSuccessPress);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				btnNewButton.setBackground(new Color(34, 197, 94));
+				btnNewButton.setBackground(theme.buttonSuccessBG);
 			}
 		});
 		btnNewButton.setFocusable(false);
 		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBackground(new Color(34, 197, 94));
+		btnNewButton.setBackground(theme.buttonSuccessBG);
 		panel.add(btnNewButton);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBackground(new Color(113, 113, 122));
+		separator.setBackground(theme.seperator);
 		separator.setMaximumSize(new Dimension(32767, 2));
 		contentPane.add(separator);
 		
@@ -104,12 +108,12 @@ public class Mainframe extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
-		scrollPane.setBackground(new Color(39, 39, 42));
+		scrollPane.setBackground(theme.applicationBG);
 		contentPane.add(scrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EmptyBorder(4, 4, 4, 4));
-		panel_1.setBackground(new Color(24, 24, 27));
+		panel_1.setBackground(theme.applicationBG);
 		scrollPane.setViewportView(panel_1);
 		panel_1.setMaximumSize(scrollPane.getSize());
 		panel_1.setLayout(new GridLayout(0, 3, 4, 4));
@@ -127,7 +131,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(footer);
 		
 		JLabel lblNewLabel = new JLabel("Created by Ameer");
-		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setForeground(theme.applicationFG);
 		footer.add(lblNewLabel);
 	}
 

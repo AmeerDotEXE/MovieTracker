@@ -1,3 +1,5 @@
+package MovieTracker;
+
 import java.util.ArrayList;
 
 import MovieCard.MovieInfo;

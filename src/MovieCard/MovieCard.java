@@ -1,6 +1,5 @@
 package MovieCard;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -10,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 
 import Components.RoundedPanel;
+import MovieTracker.Theme;
 
 
 public class MovieCard extends JPanel {
@@ -17,20 +17,24 @@ public class MovieCard extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private MovieInfo info;
+	Theme theme; // for easy access
 
 	/**
 	 * Create the panel.
 	 */
 	public MovieCard(MovieInfo info) {
 		this.info = info;
+		
+		theme = Theme.getInstance();
+		
 		setBorder(new EmptyBorder(6, 6, 6, 6));
-		setBackground(new Color(39, 39, 42));
+		setBackground(theme.cardBG);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel image = new JPanel();
 		image.setPreferredSize(new Dimension(10, 60));
 		image.setMinimumSize(new Dimension(10, 60));
-		image.setBackground(new Color(24, 24, 27));
+		image.setBackground(theme.applicationBG);
 		add(image);
 
 		createTitle();
@@ -55,7 +59,7 @@ public class MovieCard extends JPanel {
 		filteredTitle = filteredTitle.substring(0, Math.min(10, filteredTitle.length()));
 		JLabel titleText = new JLabel(filteredTitle);
 		titleText.setFont(new Font("Arial", Font.BOLD, 16));
-		titleText.setForeground(new Color(250, 250, 250));
+		titleText.setForeground(theme.cardFG);
 		titleLine.add(titleText);
 	}
 
@@ -71,7 +75,7 @@ public class MovieCard extends JPanel {
 		
 		JLabel yearText = new JLabel(info.getYear()+"");
 		yearText.setFont(new Font("Arial", Font.BOLD, 14));
-		yearText.setForeground(new Color(228, 228, 231));
+		yearText.setForeground(theme.cardSecondaryFG);
 		yearLine.add(yearText);
 	}
 
@@ -87,7 +91,7 @@ public class MovieCard extends JPanel {
 		
 		JLabel durationText = new JLabel(info.getDuration());
 		durationText.setFont(new Font("Arial", Font.BOLD, 14));
-		durationText.setForeground(new Color(228, 228, 231));
+		durationText.setForeground(theme.cardSecondaryFG);
 		durationLine.add(durationText);
 	}
 	
@@ -104,7 +108,7 @@ public class MovieCard extends JPanel {
 		
 		RoundedPanel roundedPanel = new RoundedPanel(8);
 		roundedPanel.setBorder(new EmptyBorder(0, 2, 0, 2));
-		roundedPanel.setBackground(new Color(22, 163, 74));
+		roundedPanel.setBackground(theme.buttonSuccessHover);
 		FlowLayout flowLayout_1 = (FlowLayout) roundedPanel.getLayout();
 		flowLayout_1.setVgap(2);
 		flowLayout_1.setHgap(2);
@@ -112,7 +116,7 @@ public class MovieCard extends JPanel {
 		status.add(roundedPanel);
 
 		RoundedPanel statusColor = new RoundedPanel(10);
-		statusColor.setBackground(new Color(74, 222, 128));
+		statusColor.setBackground(theme.buttonSuccessPress);
 		roundedPanel.add(statusColor);
 		
 		JLabel lblNewLabel_1 = new JLabel("Watched");
@@ -134,19 +138,19 @@ public class MovieCard extends JPanel {
 		add(rating);
 
 		RoundedPanel star = new RoundedPanel(10);
-		star.setBackground(new Color(222, 222, 128));
+		star.setBackground(theme.movieStar);
 		rating.add(star);
 		
 		RoundedPanel star_1 = new RoundedPanel(10);
-		star_1.setBackground(new Color(222, 222, 128));
+		star_1.setBackground(theme.movieStar);
 		rating.add(star_1);
 
 		RoundedPanel star_2 = new RoundedPanel(10);
-		star_2.setBackground(new Color(222, 222, 128));
+		star_2.setBackground(theme.movieStar);
 		rating.add(star_2);
 
 		RoundedPanel star_3 = new RoundedPanel(10);
-		star_3.setBackground(new Color(222, 222, 128));
+		star_3.setBackground(theme.movieStar);
 		rating.add(star_3);
 	}
 

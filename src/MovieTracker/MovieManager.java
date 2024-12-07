@@ -1,3 +1,4 @@
+package MovieTracker;
 import javax.swing.JPanel;
 
 import MovieCard.MovieCard;

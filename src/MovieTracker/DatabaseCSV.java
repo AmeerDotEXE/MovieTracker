@@ -1,3 +1,5 @@
+package MovieTracker;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class DatabaseCSV implements Database {
 	private ArrayList<MovieInfo> movies = new ArrayList<MovieInfo>();
 	
 	DatabaseCSV() {
-		File csvFile = new File("data.csv");
+		File csvFile = new File("example_data.csv");
 		if (!csvFile.exists()) {
 			try {
 				csvFile.createNewFile();
