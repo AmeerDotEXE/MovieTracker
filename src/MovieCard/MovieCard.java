@@ -12,6 +12,7 @@ import Components.ImagePanel;
 import Components.RoundedPanel;
 import MovieTracker.Theme;
 import java.awt.Component;
+
 import javax.swing.Box;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -56,7 +57,8 @@ public class MovieCard extends JPanel {
 
 		createTitle();
 		
-		createStatus();
+		JPanel status = createStatus(info.getStatus());
+		add(status);
 		createRating();
 
 		createYear();
@@ -158,7 +160,7 @@ public class MovieCard extends JPanel {
 		durationLine.add(durationText);
 	}
 	
-	protected void createStatus() {
+	public static JPanel createStatus(MovieStatus movieStatus) {
 		JPanel status = new JPanel();
 		status.setBorder(new EmptyBorder(2, 0, 6, 0));
 		FlowLayout flowLayout = (FlowLayout) status.getLayout();
@@ -167,11 +169,11 @@ public class MovieCard extends JPanel {
 		flowLayout.setAlignment(FlowLayout.LEADING);
 		status.setMaximumSize(new Dimension(32767, 10));
 		status.setOpaque(false);
-		add(status);
+//		add(status);
 		
 		RoundedPanel roundedPanel = new RoundedPanel(8);
 		roundedPanel.setBorder(new EmptyBorder(0, 2, 0, 2));
-		roundedPanel.setBackground(theme.buttonSuccessHover);
+		roundedPanel.setBackground(Theme.getInstance().buttonSuccessHover);
 		FlowLayout flowLayout_1 = (FlowLayout) roundedPanel.getLayout();
 		flowLayout_1.setVgap(2);
 		flowLayout_1.setHgap(2);
@@ -179,13 +181,15 @@ public class MovieCard extends JPanel {
 		status.add(roundedPanel);
 
 		RoundedPanel statusColor = new RoundedPanel(10);
-		statusColor.setBackground(theme.buttonSuccessPress);
+		statusColor.setBackground(Theme.getInstance().buttonSuccessPress);
 		roundedPanel.add(statusColor);
 		
-		JLabel lblNewLabel_1 = new JLabel("Watched");
+		JLabel lblNewLabel_1 = new JLabel(movieStatus.toString());
 		lblNewLabel_1.setBorder(new EmptyBorder(0, 2, 0, 2));
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		roundedPanel.add(lblNewLabel_1);
+		
+		return status;
 	}
 	
 	protected void createRating() {
@@ -199,22 +203,14 @@ public class MovieCard extends JPanel {
 		rating.setMaximumSize(new Dimension(32767, 10));
 		rating.setOpaque(false);
 		add(rating);
-
-		RoundedPanel star = new RoundedPanel(10);
-		star.setBackground(theme.movieStar);
-		rating.add(star);
 		
-		RoundedPanel star_1 = new RoundedPanel(10);
-		star_1.setBackground(theme.movieStar);
-		rating.add(star_1);
-
-		RoundedPanel star_2 = new RoundedPanel(10);
-		star_2.setBackground(theme.movieStar);
-		rating.add(star_2);
-
-		RoundedPanel star_3 = new RoundedPanel(10);
-		star_3.setBackground(theme.movieStar);
-		rating.add(star_3);
+		for (int i = 0; i < info.getRate(); i++) {
+			ImagePanel star = new ImagePanel(theme.star);
+			if (i == 5) {
+				star.setImage(theme.starSuper);
+			}
+			rating.add(star);
+		}
 	}
 
 }

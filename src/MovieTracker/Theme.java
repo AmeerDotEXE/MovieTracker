@@ -1,9 +1,17 @@
 package MovieTracker;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 
 public class Theme {
 	private static Theme instance;
+	
+	public BufferedImage star;
+	public BufferedImage starEmpty;
+	public BufferedImage starSuper;
 
 	public Color buttonSuccessBG;
 	public Color buttonSuccessPress;
@@ -49,6 +57,30 @@ class DarkTheme extends Theme {
 
 	DarkTheme() {
 		Theme.setInstance(this);
+		try {
+			File imageFile = new File("assets/star-dark.jpg");
+			BufferedImage image = ImageIO.read(imageFile);
+			star = image;
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Star image not found.");
+		}
+		try {
+			File imageFile = new File("assets/star-dark-empty.jpg");
+			BufferedImage image = ImageIO.read(imageFile);
+			starEmpty = image;
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Empty Star image not found.");
+		}
+		try {
+			File imageFile = new File("assets/star-dark-super.jpg");
+			BufferedImage image = ImageIO.read(imageFile);
+			starSuper = image;
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Super Star image not found.");
+		}
 		
 		buttonSuccessBG = g500;
 		buttonSuccessPress = g400;
@@ -62,6 +94,6 @@ class DarkTheme extends Theme {
 		cardHover = z700;
 		cardSecondaryFG = z200;
 		
-		movieStar = new Color(222, 222, 128);
+		movieStar = new Color(234, 179, 8);
 	}
 }

@@ -26,6 +26,9 @@ public class ImagePanel extends JPanel {
 			System.out.print("Image Not Found: "+imagePath);
 		}
 	}
+	public ImagePanel(BufferedImage image) {
+		this.image = image;
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -37,11 +40,14 @@ public class ImagePanel extends JPanel {
 		float imageAspectRation = ((float)imageWidth) / ((float)imageHeight);
 
 		// fill container
-		if (getWidth() < imageWidth) {
-			imageWidth = getWidth();
-			imageHeight = (int) (imageWidth / imageAspectRation);
-		}
+		imageWidth = getWidth();
+		imageHeight = (int) (imageWidth / imageAspectRation);
+		
 		// fit container
+//		if (getWidth() < imageWidth) {
+//			imageWidth = getWidth();
+//			imageHeight = (int) (imageWidth / imageAspectRation);
+//		}
 //		if (getHeight() < imageHeight) {
 //			imageHeight = getHeight();
 //			imageWidth = (int) (imageHeight * imageAspectRation);
@@ -59,6 +65,11 @@ public class ImagePanel extends JPanel {
 		return imagePos;
 	}
 
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+		this.repaint();
+	}
 	public void setImagePosition(int imagePos) {
 		this.imagePos = imagePos;
 	}

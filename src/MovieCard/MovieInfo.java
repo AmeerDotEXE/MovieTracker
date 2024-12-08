@@ -63,6 +63,10 @@ public class MovieInfo {
 		return mins;
 	}
 
+	public void setName(String name) { this.name = name; }
+	public void setYear(int year) { this.year = year; }
+	public void setStatus(MovieStatus status) { this.status = status; }
+	public void setRate(int rate) { this.rate = rate; }
 	public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 	public void setImagePosition(int imagePosition) { this.imagePosition = imagePosition; }
 }

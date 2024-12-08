@@ -1,80 +1,48 @@
-import java.awt.EventQueue;
+package Pages;
 
-import javax.swing.JFrame;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
 import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 
-import javax.swing.UIManager;
-
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import javax.swing.Box;
-import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.Component;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Cursor;
-import javax.swing.ScrollPaneConstants;
-import java.awt.GridLayout;
-import javax.swing.JSeparator;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-
-public class Mainframe extends JFrame {
+public class MoviesPage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
+	 * Create the panel.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					Mainframe frame = new Mainframe();
-					frame.setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Mainframe() {
+	public MoviesPage() {
 		Theme theme = Theme.getInstance();
 		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(theme.applicationBG);
-		setTitle("Movie Tracker");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(912, 512);
-        setMinimumSize(new Dimension(480, 360));
-        setMaximumSize(new Dimension(1056, 792));
-        setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBackground(theme.applicationBG);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		setBorder(null);
 		
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		panel.setMaximumSize(new Dimension(32767, 32));
-		contentPane.add(panel);
+		add(panel);
 		
 		JButton btnNewButton = new JButton("Add Movie");
 		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -102,15 +70,15 @@ public class Mainframe extends JFrame {
 		panel.add(btnNewButton);
 		
 		Component verticalStrut_1_1 = Box.createVerticalStrut(4);
-		contentPane.add(verticalStrut_1_1);
+		add(verticalStrut_1_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBackground(theme.seperator);
 		separator.setMaximumSize(new Dimension(32767, 2));
-		contentPane.add(separator);
+		add(separator);
 		
 		Component verticalStrut_1 = Box.createVerticalStrut(8);
-		contentPane.add(verticalStrut_1);
+		add(verticalStrut_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setMaximumSize(new Dimension(1056, 32767));
@@ -118,7 +86,7 @@ public class Mainframe extends JFrame {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(theme.applicationBG);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		contentPane.add(scrollPane);
+		add(scrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EmptyBorder(4, 4, 4, 4));
@@ -137,7 +105,7 @@ public class Mainframe extends JFrame {
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		footer.setMaximumSize(new Dimension(32767, 28));
 		footer.setOpaque(false);
-		contentPane.add(footer);
+		add(footer);
 		
 		JLabel lblNewLabel = new JLabel("Created by Ameer");
 		lblNewLabel.setForeground(theme.applicationFG);

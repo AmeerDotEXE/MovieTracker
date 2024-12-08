@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 import MovieCard.MovieInfo;
+import MovieCard.MovieStatus;
 
 public class DatabaseCSV implements Database {
 	private File dataFile;
@@ -57,6 +58,8 @@ public class DatabaseCSV implements Database {
 			} else {
 				movie = new MovieInfo(name);
 			}
+			if (cells[2] != "") movie.setStatus(MovieStatus.fromString(cells[2]));
+			if (cells[5] != "") movie.setRate(cells[5].length());
 			if (cells[10] != "") movie.setImagePath("movie-images/"+cells[10]);
 			if (cells[11] != "") movie.setImagePosition(Integer.parseInt(cells[11]));
 			movies.add(movie);
