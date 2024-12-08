@@ -1,4 +1,6 @@
 package MovieTracker;
+
+import java.util.LinkedList;
 import javax.swing.JPanel;
 
 import MovieCard.MovieCard;
@@ -8,19 +10,21 @@ public class MovieManager {
 	private static MovieManager instance = new MovieManager();
 	public static MovieManager getInstance() { return instance; }
 	
-	Database db; 
+	Database db;
+	LinkedList<MovieInfo> movies;
 	
 	MovieManager() {
 		db = new DatabaseCSV();
+		movies = db.getMovies();
 	}
 	
 	public void generateMovieCards(JPanel parent) {
 		
-		for (MovieInfo movie : db.getMovies()) {
+		for (MovieInfo movie : movies) {
 			parent.add(new MovieCard(movie));
 		}
 
-		for (MovieInfo movie : db.getMovies()) {
+		for (MovieInfo movie : movies) {
 			parent.add(new MovieCard(movie));
 		}
 		

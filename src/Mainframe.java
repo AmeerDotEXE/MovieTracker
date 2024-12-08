@@ -23,6 +23,8 @@ import java.awt.Cursor;
 import javax.swing.ScrollPaneConstants;
 import java.awt.GridLayout;
 import javax.swing.JSeparator;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Mainframe extends JFrame {
 
@@ -56,7 +58,9 @@ public class Mainframe extends JFrame {
 		setBackground(theme.applicationBG);
 		setTitle("Movie Tracker");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(480, 360);
+        setSize(912, 512);
+        setMinimumSize(new Dimension(480, 360));
+        setMaximumSize(new Dimension(1056, 792));
         setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(theme.applicationBG);
@@ -69,7 +73,7 @@ public class Mainframe extends JFrame {
 		panel.setOpaque(false);
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
-		panel.setMaximumSize(new Dimension(32767, 10));
+		panel.setMaximumSize(new Dimension(32767, 32));
 		contentPane.add(panel);
 		
 		JButton btnNewButton = new JButton("Add Movie");
@@ -97,6 +101,9 @@ public class Mainframe extends JFrame {
 		btnNewButton.setBackground(theme.buttonSuccessBG);
 		panel.add(btnNewButton);
 		
+		Component verticalStrut_1_1 = Box.createVerticalStrut(4);
+		contentPane.add(verticalStrut_1_1);
+		
 		JSeparator separator = new JSeparator();
 		separator.setBackground(theme.seperator);
 		separator.setMaximumSize(new Dimension(32767, 2));
@@ -106,6 +113,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(verticalStrut_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setMaximumSize(new Dimension(1056, 32767));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(theme.applicationBG);
@@ -127,13 +135,29 @@ public class Mainframe extends JFrame {
 		flowLayout_1.setVgap(0);
 		flowLayout_1.setHgap(0);
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		footer.setMaximumSize(new Dimension(32767, 10));
+		footer.setMaximumSize(new Dimension(32767, 28));
 		footer.setOpaque(false);
 		contentPane.add(footer);
 		
 		JLabel lblNewLabel = new JLabel("Created by Ameer");
 		lblNewLabel.setForeground(theme.applicationFG);
 		footer.add(lblNewLabel);
+
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int columns = 3;
+				// 1 element min width 140, max width 188
+				// 3 Elements width 420 with spaces is 428
+				//   with minimum total 480
+				// but total width for 4 elements is 624 and 5 is 768 and 6 is 912
+				// which means maximum total should be width+(48*columns)
+				if (getWidth() > 912) columns = 6;
+				else if (getWidth() > 768) columns = 5;
+				else if (getWidth() > 624) columns = 4;
+				panel_1.setLayout(new GridLayout(0, columns, 4, 4));
+			}
+		});
 	}
 
 }

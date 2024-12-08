@@ -14,6 +14,10 @@ import MovieTracker.Theme;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 
 public class MovieCard extends JPanel {
@@ -24,7 +28,7 @@ public class MovieCard extends JPanel {
 	Theme theme; // for easy access
 
 	/**
-	 * @wbp.eval.method.parameter info new MovieInfo("The Terminator")
+	 * @wbp.eval.method.parameter info new MovieInfo("Back to the Future")
 	 * @wbp.eval.method.parameter info2 new MovieInfo("The Terminator", 95, 2025)
 	 * @wbp.eval.method.parameter info3 new MovieInfo("Pirates of the Caribbean: The Curse of the Black Pearl", 95, 2025)
 	 */
@@ -35,16 +39,17 @@ public class MovieCard extends JPanel {
 		
 		setBorder(new EmptyBorder(6, 6, 6, 6));
 		setBackground(theme.cardBG);
-		Dimension cardSize = new Dimension((16*8)+12, 192);
+		Dimension cardSize = new Dimension((16*8)+12, 176+12);
 		setPreferredSize(cardSize);
-		setMinimumSize(new Dimension(128, 192));
+		setMaximumSize(new Dimension(176+12, 204+12));
+		setMinimumSize(new Dimension(128+12, 176+12));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		ImagePanel image = new ImagePanel(info.getImagePath());
 		image.setImagePosition(info.getImagePosition());
 		Dimension imgSize = new Dimension(16*8, 9*8);
 		image.setPreferredSize(imgSize);
-		image.setMaximumSize(imgSize);
+		image.setMaximumSize(new Dimension(16*11, 9*11));
 		image.setMinimumSize(new Dimension(16*8, 9*8));
 		image.setBackground(theme.applicationBG);
 		add(image);
@@ -59,6 +64,29 @@ public class MovieCard extends JPanel {
 
 		Component verticalGlue = Box.createVerticalGlue();
 		add(verticalGlue);
+
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBackground(theme.cardHover);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBackground(theme.cardBG);
+			}
+		});
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int width = getMinimumSize().width;
+				float sizeFactor = ((float)getWidth() - (float)width) / 48.0f;
+				int height = (int)(28 * sizeFactor) + getMinimumSize().height;
+				setPreferredSize(new Dimension(width, height));
+
+				int imgWidth = image.getWidth();
+				image.setPreferredSize(new Dimension(imgWidth, (int) (((float)(imgWidth) * 9) / 16.0)));
+			}
+		});
 	}
 
 	protected void createTitle() {
@@ -80,6 +108,13 @@ public class MovieCard extends JPanel {
 		titleText.setFont(new Font("Arial", Font.BOLD, 16));
 		titleText.setForeground(theme.cardFG);
 		titleLine.add(titleText);
+		
+		titleLine.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				titleText.setPreferredSize(new Dimension(titleLine.getWidth()-12, 18));
+			}
+		});
 		
 //		for (int i = 0; i < 3; i++) {
 //			int charsCut = (i+1)*14;

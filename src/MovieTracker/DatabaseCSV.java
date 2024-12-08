@@ -2,7 +2,6 @@ package MovieTracker;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -10,7 +9,7 @@ import MovieCard.MovieInfo;
 
 public class DatabaseCSV implements Database {
 	private File dataFile;
-	private ArrayList<MovieInfo> movies = new ArrayList<MovieInfo>();
+	private LinkedList<MovieInfo> movies = new LinkedList<MovieInfo>();
 	
 	DatabaseCSV() {
 		File csvFile = new File("data.csv");
@@ -36,6 +35,7 @@ public class DatabaseCSV implements Database {
 			fileReader = new Scanner(dataFile);
 		} catch (IOException e) {}
 		if (fileReader == null) return;
+		movies.clear();
 		
 		if (fileReader.hasNextLine()) fileReader.nextLine(); // skip header
 		while (fileReader.hasNextLine()) {
@@ -43,7 +43,11 @@ public class DatabaseCSV implements Database {
 			if (line == "") continue;
 			String[] cells = parseCSVLine(line);
 
-			if (cells.length != 12) continue;
+			if (cells.length != 12) {
+				if (cells.length > 0)
+					System.out.println("Corrupted line: "+cells[0]);
+				continue;
+			}
 			String name = cells[1];
 			MovieInfo movie;
 			if (cells[4] != "") {
@@ -86,7 +90,7 @@ public class DatabaseCSV implements Database {
 		return cells.toArray(String[]::new);
 	}
 
-	public ArrayList<MovieInfo> getMovies() {
+	public LinkedList<MovieInfo> getMovies() {
 		return movies;
 	}
 	

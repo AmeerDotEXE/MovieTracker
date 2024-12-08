@@ -14,6 +14,7 @@ public class Theme {
 	public Color seperator;
 	public Color cardBG;
 	public Color cardFG;
+	public Color cardHover;
 	public Color cardSecondaryFG;
 
 	public Color movieStar;
@@ -58,6 +59,7 @@ class DarkTheme extends Theme {
 		seperator = z500;
 		cardBG = z800;
 		cardFG = new Color(250, 250, 250);
+		cardHover = z700;
 		cardSecondaryFG = z200;
 		
 		movieStar = new Color(222, 222, 128);

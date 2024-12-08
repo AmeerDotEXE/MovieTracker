@@ -1,9 +1,9 @@
 package MovieTracker;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import MovieCard.MovieInfo;
 
 public interface Database {
-	public ArrayList<MovieInfo> getMovies();
+	public LinkedList<MovieInfo> getMovies();
 }
