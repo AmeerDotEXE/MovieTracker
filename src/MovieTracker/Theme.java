@@ -13,9 +13,17 @@ public class Theme {
 	public BufferedImage starEmpty;
 	public BufferedImage starSuper;
 
+	public BufferedImage favoriteOn;
+	public BufferedImage favoriteOff;
+
 	public Color buttonSuccessBG;
 	public Color buttonSuccessPress;
 	public Color buttonSuccessHover;
+
+	public Color buttonBG;
+	public Color buttonFG;
+	public Color buttonPress;
+	public Color buttonHover;
 	
 	public Color applicationBG;
 	public Color applicationFG;
@@ -81,10 +89,31 @@ class DarkTheme extends Theme {
 			// handle exception...
 			System.out.print("Super Star image not found.");
 		}
+		try {
+			File imageFile = new File("assets/fav-dark-on.jpg");
+			BufferedImage image = ImageIO.read(imageFile);
+			favoriteOn = image;
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Favorite On image not found.");
+		}
+		try {
+			File imageFile = new File("assets/fav-dark-off.jpg");
+			BufferedImage image = ImageIO.read(imageFile);
+			favoriteOff = image;
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Favorite Off image not found.");
+		}
 		
 		buttonSuccessBG = g500;
 		buttonSuccessPress = g400;
 		buttonSuccessHover = g600;
+
+		buttonBG = z800;
+		buttonFG = z200;
+		buttonPress = z700;
+		buttonHover = z900;
 		
 		applicationBG = z900;
 		applicationFG = Color.WHITE;

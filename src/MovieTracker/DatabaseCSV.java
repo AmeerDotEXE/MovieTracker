@@ -58,6 +58,7 @@ public class DatabaseCSV implements Database {
 			} else {
 				movie = new MovieInfo(name);
 			}
+			if (cells[0].equalsIgnoreCase("yes")) movie.setFavorite(true);
 			if (cells[2] != "") movie.setStatus(MovieStatus.fromString(cells[2]));
 			if (cells[5] != "") movie.setRate(cells[5].length());
 			if (cells[10] != "") movie.setImagePath("movie-images/"+cells[10]);

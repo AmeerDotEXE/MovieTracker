@@ -9,8 +9,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Font;
 
 import Components.ImagePanel;
-import Components.RoundedPanel;
+import Components.StatusPanel;
 import MovieTracker.Theme;
+import Pages.Mainframe;
+
 import java.awt.Component;
 
 import javax.swing.Box;
@@ -26,7 +28,18 @@ public class MovieCard extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private MovieInfo info;
+
 	Theme theme; // for easy access
+	private JLabel titleText;
+	private StatusPanel status;
+	private JPanel rating;
+	private JPanel yearLine;
+	private JLabel yearText;
+	private JPanel durationLine;
+	private JLabel durationText;
+	private ImagePanel[] stars;
+	private ImagePanel image;
+	private ImagePanel favoriteIcon;
 
 	/**
 	 * @wbp.eval.method.parameter info new MovieInfo("Back to the Future")
@@ -38,6 +51,7 @@ public class MovieCard extends JPanel {
 		
 		theme = Theme.getInstance();
 		
+		MovieCard card = this;
 		setBorder(new EmptyBorder(6, 6, 6, 6));
 		setBackground(theme.cardBG);
 		Dimension cardSize = new Dimension((16*8)+12, 176+12);
@@ -46,7 +60,7 @@ public class MovieCard extends JPanel {
 		setMinimumSize(new Dimension(128+12, 176+12));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		ImagePanel image = new ImagePanel(info.getImagePath());
+		image = new ImagePanel(info.getImagePath());
 		image.setImagePosition(info.getImagePosition());
 		Dimension imgSize = new Dimension(16*8, 9*8);
 		image.setPreferredSize(imgSize);
@@ -57,7 +71,7 @@ public class MovieCard extends JPanel {
 
 		createTitle();
 		
-		JPanel status = createStatus(info.getStatus());
+		status = new StatusPanel(info.getStatus());
 		add(status);
 		createRating();
 
@@ -75,6 +89,10 @@ public class MovieCard extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				setBackground(theme.cardBG);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Mainframe.showMovieInfo(card);
 			}
 		});
 		addComponentListener(new ComponentAdapter() {
@@ -103,7 +121,7 @@ public class MovieCard extends JPanel {
 		
 		String originalTitle = info.getName();
 
-		JLabel titleText = new JLabel(originalTitle);
+		titleText = new JLabel(originalTitle);
 		titleText.setHorizontalAlignment(SwingConstants.CENTER);
 		titleText.setVerticalAlignment(SwingConstants.TOP);
 		titleText.setPreferredSize(new Dimension(16*8, 18));
@@ -129,24 +147,26 @@ public class MovieCard extends JPanel {
 	}
 
 	protected void createYear() {
-		if (info.getYear() == 0) return;
-		JPanel yearLine = new JPanel();
-		FlowLayout fl_year = (FlowLayout) yearLine.getLayout();
-		fl_year.setVgap(0);
-		fl_year.setAlignment(FlowLayout.LEADING);
+		yearLine = new JPanel();
+		FlowLayout fl_yearLine = (FlowLayout) yearLine.getLayout();
+		fl_yearLine.setVgap(0);
+		fl_yearLine.setAlignment(FlowLayout.LEADING);
 		yearLine.setMaximumSize(new Dimension(32767, 10));
 		yearLine.setOpaque(false);
 		this.add(yearLine);
 		
-		JLabel yearText = new JLabel(info.getYear()+"");
+		yearText = new JLabel(info.getYear()+"");
 		yearText.setFont(new Font("Arial", Font.BOLD, 14));
 		yearText.setForeground(theme.cardSecondaryFG);
 		yearLine.add(yearText);
+
+		if (info.getYear() == 0) {
+			yearLine.setVisible(false);
+		}
 	}
 
 	protected void createDuration() {
-		if (info.getDurationMins() == 0) return;
-		JPanel durationLine = new JPanel();
+		durationLine = new JPanel();
 		FlowLayout fl_duration = (FlowLayout) durationLine.getLayout();
 		fl_duration.setVgap(0);
 		fl_duration.setAlignment(FlowLayout.LEADING);
@@ -154,63 +174,96 @@ public class MovieCard extends JPanel {
 		durationLine.setOpaque(false);
 		this.add(durationLine);
 		
-		JLabel durationText = new JLabel(info.getDuration());
+		durationText = new JLabel(info.getDuration());
 		durationText.setFont(new Font("Arial", Font.BOLD, 14));
 		durationText.setForeground(theme.cardSecondaryFG);
 		durationLine.add(durationText);
-	}
-	
-	public static JPanel createStatus(MovieStatus movieStatus) {
-		JPanel status = new JPanel();
-		status.setBorder(new EmptyBorder(2, 0, 6, 0));
-		FlowLayout flowLayout = (FlowLayout) status.getLayout();
-		flowLayout.setHgap(0);
-		flowLayout.setVgap(0);
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		status.setMaximumSize(new Dimension(32767, 10));
-		status.setOpaque(false);
-//		add(status);
-		
-		RoundedPanel roundedPanel = new RoundedPanel(8);
-		roundedPanel.setBorder(new EmptyBorder(0, 2, 0, 2));
-		roundedPanel.setBackground(Theme.getInstance().buttonSuccessHover);
-		FlowLayout flowLayout_1 = (FlowLayout) roundedPanel.getLayout();
-		flowLayout_1.setVgap(2);
-		flowLayout_1.setHgap(2);
-		flowLayout_1.setAlignOnBaseline(true);
-		status.add(roundedPanel);
 
-		RoundedPanel statusColor = new RoundedPanel(10);
-		statusColor.setBackground(Theme.getInstance().buttonSuccessPress);
-		roundedPanel.add(statusColor);
-		
-		JLabel lblNewLabel_1 = new JLabel(movieStatus.toString());
-		lblNewLabel_1.setBorder(new EmptyBorder(0, 2, 0, 2));
-		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		roundedPanel.add(lblNewLabel_1);
-		
-		return status;
+		if (info.getDurationMins() == 0) {
+			durationLine.setVisible(false);
+		}
 	}
 	
 	protected void createRating() {
-		if (info.getRate() == 0) return;
-		JPanel rating = new JPanel();
+		rating = new JPanel();
 		rating.setBorder(new EmptyBorder(0, 0, 3, 0));
-		FlowLayout flowLayout = (FlowLayout) rating.getLayout();
-		flowLayout.setHgap(4);
-		flowLayout.setVgap(0);
-		flowLayout.setAlignment(FlowLayout.LEADING);
+		FlowLayout fl_rating = (FlowLayout) rating.getLayout();
+		fl_rating.setHgap(4);
+		fl_rating.setVgap(0);
+		fl_rating.setAlignment(FlowLayout.LEADING);
 		rating.setMaximumSize(new Dimension(32767, 10));
 		rating.setOpaque(false);
 		add(rating);
-		
-		for (int i = 0; i < info.getRate(); i++) {
-			ImagePanel star = new ImagePanel(theme.star);
-			if (i == 5) {
-				star.setImage(theme.starSuper);
-			}
-			rating.add(star);
+
+		favoriteIcon = new ImagePanel(theme.favoriteOn);
+		favoriteIcon.setPreferredSize(new Dimension(10, 10));
+		if (!info.isFavorite()) favoriteIcon.setVisible(false);
+		rating.add(favoriteIcon);
+
+		stars = new ImagePanel[6];
+
+		updateRating(info.getRate());
+
+		if (!info.isFavorite() && info.getRate() == 0) {
+			rating.setVisible(false);
 		}
 	}
 
+	void updateRating(int starsSelected) {
+		for (int i = 0; i < stars.length; i++) {
+			ImagePanel star = stars[i];
+			
+			if (i >= starsSelected) {
+				if (star != null) {
+					rating.remove(star);
+					stars[i] = null;
+				}
+				continue;
+			}
+
+			if (star == null) {
+				star = new ImagePanel(theme.star);
+				if (i == 5) {
+					star.setImage(theme.starSuper);
+				}
+
+				stars[i] = star;
+				rating.add(star);
+			}
+		}
+
+		if (!info.isFavorite() && starsSelected == 0) {
+			rating.setVisible(false);
+		} else rating.setVisible(true);
+	}
+	
+
+	
+	public void updateMovieData() {
+		// TODO: check for nulls as they give error
+		image.setImage(info.getImagePath());
+		image.setImagePosition(info.getImagePosition());
+		titleText.setText(info.getName());
+		status.updateStatus(info.getStatus());
+		if (info.isFavorite()) favoriteIcon.setVisible(true);
+		else favoriteIcon.setVisible(false);
+		updateRating(info.getRate());
+		if (info.getYear() == 0) {
+			yearLine.setVisible(false);
+		} else {
+			yearLine.setVisible(true);
+			yearText.setText(info.getYear()+"");
+		}
+		if (info.getDurationMins() == 0) {
+			durationLine.setVisible(false);
+		} else {
+			durationLine.setVisible(true);
+			durationText.setText(info.getDuration());
+		}
+	}
+	
+
+	public MovieInfo getMovie() {
+		return info;
+	}
 }

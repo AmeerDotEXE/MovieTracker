@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import MovieCard.MovieCard;
 import MovieTracker.Theme;
 
 import javax.swing.UIManager;
@@ -15,9 +16,12 @@ import java.awt.CardLayout;
 public class Mainframe extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private CardLayout cd;
+	private static Mainframe instance;
+	
 	Theme theme;
+	private JPanel contentPane;
+	private CardLayout cl;
+	private MovieInfoPage movieInfoPane;
 
 	/**
 	 * Launch the application.
@@ -28,6 +32,7 @@ public class Mainframe extends JFrame {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Mainframe frame = new Mainframe();
+					Mainframe.instance = frame;
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -55,15 +60,24 @@ public class Mainframe extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		cd = new CardLayout(0, 0);
-		contentPane.setLayout(cd);
+		cl = new CardLayout(0, 0);
+		contentPane.setLayout(cl);
 		
 		JPanel moviesPane = new MoviesPage();
 		contentPane.add(moviesPane, "moviesList");
 		
-		JPanel movieInfoPane = new MovieInfoPage();
+		movieInfoPane = new MovieInfoPage();
 		contentPane.add(movieInfoPane, "movieInfoPane");
-
-		cd.show(contentPane, "movieInfoPane");
+	}
+	
+	public static void showMovieInfo(MovieCard movieCard) {
+		Mainframe frame = Mainframe.instance;
+		frame.movieInfoPane.selectMovie(movieCard);
+		frame.cl.show(frame.contentPane, "movieInfoPane");
+	}
+	
+	public static void showMoviePage() {
+		Mainframe frame = Mainframe.instance;
+		frame.cl.show(frame.contentPane, "moviesList");
 	}
 }

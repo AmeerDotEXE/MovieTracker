@@ -70,8 +70,25 @@ public class ImagePanel extends JPanel {
 		this.image = image;
 		this.repaint();
 	}
+	public void setImage(String imagePath) {
+		if (imagePath == null) {
+			this.image = null;
+			this.repaint();
+			return;
+		}
+		try {
+			File imageFile = new File(imagePath);
+			image = ImageIO.read(imageFile);
+		} catch (IOException ex) {
+			// handle exception...
+			System.out.print("Image Not Found: "+imagePath);
+			image = null;
+		}
+		this.repaint();
+	}
 	public void setImagePosition(int imagePos) {
 		this.imagePos = imagePos;
+		this.repaint();
 	}
 
 }

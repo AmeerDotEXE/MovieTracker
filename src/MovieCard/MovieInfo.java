@@ -36,6 +36,15 @@ public class MovieInfo {
 	public String getImagePath() { return imagePath; }
 	public int getImagePosition() { return imagePosition; }
 
+
+	public void setDuration(String duration) {
+		try {
+			int mins = durationToMins(duration);
+			this.durationMins = mins;
+		} catch (Exception e) {
+			System.out.println("Couldn't set duration for movie: "+name);
+		}
+	}
 	public String getDuration() {
 		int mins = durationMins % 60;
 		int hours = durationMins / 60;
@@ -63,6 +72,7 @@ public class MovieInfo {
 		return mins;
 	}
 
+	public void setFavorite(boolean favorite) { this.favorite = favorite; }
 	public void setName(String name) { this.name = name; }
 	public void setYear(int year) { this.year = year; }
 	public void setStatus(MovieStatus status) { this.status = status; }
