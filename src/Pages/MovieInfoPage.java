@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
 
 import Components.ImagePanel;
 import Components.RoundedPanel;
@@ -23,6 +24,9 @@ import MovieCard.MovieInfo;
 import MovieCard.MovieStatus;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Box;
@@ -30,6 +34,7 @@ import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 public class MovieInfoPage extends JPanel {
 
@@ -248,6 +253,7 @@ public class MovieInfoPage extends JPanel {
 		imageHolder.add(slider);
 		
 		image = new ImagePanel("movie-images/terminator.jpg");
+		image.setBackground(theme.cardBG);
 		image.setPreferredSize(new Dimension(16*11, 9*11));
 		imageHolder.add(image);
 
@@ -255,6 +261,53 @@ public class MovieInfoPage extends JPanel {
 			public void stateChanged(ChangeEvent e) {
 				image.setImagePosition(slider.getValue());
 				movie.setImagePosition(slider.getValue());
+			}
+		});
+		image.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					movie.setImagePosition(50);
+					movie.setImagePath(null);
+					image.resetImage();
+					slider.setValue(50);
+					return;
+				}
+ 				
+				JFileChooser j = new JFileChooser();
+				j.setFileFilter(new FileFilter() {
+					@Override
+					public boolean accept(File f) {
+						return f.isDirectory() || f.getName().endsWith(".jpg");
+					}
+
+					@Override
+					public String getDescription() {
+						return "Images Only";
+					}
+				});
+				j.setAcceptAllFileFilterUsed(false);
+	            int r = j.showOpenDialog(null);
+
+	            // if the user selects a file
+	            if (r != JFileChooser.APPROVE_OPTION) return;
+	            String filePath = "movie-Images\\"+movie.getName()+".jpg";
+	            File newFile = new File(filePath);
+	            for (int i = 2; newFile.exists(); i++) {
+	            	filePath = "movie-Images\\"+movie.getName()+i+".jpg";
+	            	newFile = new File(filePath);
+	            }
+	            
+	            try {
+					Files.copy(j.getSelectedFile().toPath(), newFile.toPath());
+					movie.setImagePosition(50);
+					movie.setImagePath(filePath);
+					slider.setValue(50);
+					image.setImagePosition(50);
+					image.setImage(filePath);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		

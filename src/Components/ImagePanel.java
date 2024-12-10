@@ -86,6 +86,11 @@ public class ImagePanel extends JPanel {
 		}
 		this.repaint();
 	}
+	public void resetImage() {
+		this.imagePos = 50;
+		this.image = null;
+		this.repaint();
+	}
 	public void setImagePosition(int imagePos) {
 		this.imagePos = imagePos;
 		this.repaint();
