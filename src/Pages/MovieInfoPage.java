@@ -134,7 +134,7 @@ public class MovieInfoPage extends JPanel {
 		navPanel.setOpaque(false);
 		add(navPanel);
 		
-		JButton btnNewButton = new JButton("Back");
+		JButton btnNewButton = new JButton("Done");
 		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override

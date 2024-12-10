@@ -10,6 +10,7 @@ import java.awt.Font;
 
 import Components.ImagePanel;
 import Components.StatusPanel;
+import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 import Pages.Mainframe;
 
@@ -240,7 +241,6 @@ public class MovieCard extends JPanel {
 
 	
 	public void updateMovieData() {
-		// TODO: check for nulls as they give error
 		image.setImage(info.getImagePath());
 		image.setImagePosition(info.getImagePosition());
 		titleText.setText(info.getName());
@@ -260,6 +260,8 @@ public class MovieCard extends JPanel {
 			durationLine.setVisible(true);
 			durationText.setText(info.getDuration());
 		}
+		
+		MovieManager.getInstance().saveMovies();
 	}
 	
 

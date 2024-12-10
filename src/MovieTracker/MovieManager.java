@@ -29,16 +29,7 @@ public class MovieManager {
 		}
 		
 	}
-	public void generateMovieCardsOld(JPanel parent) {
-		parent.add(new MovieCard(new MovieInfo("test1")));
-		parent.add(new MovieCard(new MovieInfo("test2")));
-		parent.add(new MovieCard(new MovieInfo("test3")));
-		parent.add(new MovieCard(new MovieInfo("test4")));
-		parent.add(new MovieCard(new MovieInfo("test5")));
-		
-		for (int i = 0; i < 10; i++) {
-			MovieCard movieCard = new MovieCard(new MovieInfo("test"+(i+6), i*30, 2024));
-			parent.add(movieCard);
-		}
+	public void saveMovies() {
+		db.setMovies(movies);
 	}
 }

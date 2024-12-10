@@ -1,6 +1,8 @@
 package MovieTracker;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -50,16 +52,11 @@ public class DatabaseCSV implements Database {
 				continue;
 			}
 			String name = cells[1];
-			MovieInfo movie;
-			if (cells[4] != "") {
-				int year = Integer.parseInt(cells[4]);
-				int totalMins = MovieInfo.durationToMins(cells[3]);
-				movie = new MovieInfo(name, totalMins, year);
-			} else {
-				movie = new MovieInfo(name);
-			}
+			MovieInfo movie = new MovieInfo(name);
 			if (cells[0].equalsIgnoreCase("yes")) movie.setFavorite(true);
 			if (cells[2] != "") movie.setStatus(MovieStatus.fromString(cells[2]));
+			if (cells[3] != "") movie.setDuration(cells[3]);
+			if (cells[4] != "") movie.setYear(Integer.parseInt(cells[4]));
 			if (cells[5] != "") movie.setRate(cells[5].length());
 			if (cells[10] != "") movie.setImagePath("movie-images/"+cells[10]);
 			if (cells[11] != "") movie.setImagePosition(Integer.parseInt(cells[11]));
@@ -96,6 +93,51 @@ public class DatabaseCSV implements Database {
 
 	public LinkedList<MovieInfo> getMovies() {
 		return movies;
+	}
+
+	public void setMovies(LinkedList<MovieInfo> movies) {
+		try {
+			saveMovies(movies);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	private void saveMovies(LinkedList<MovieInfo> movies) throws IOException {
+		FileWriter fileWriter = new FileWriter(this.dataFile, false);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		
+
+		// write header
+		bufferedWriter.write("Favorite,Name,Movie Status,Run Time,Year,Rate,Movie Last Watched,Movie Genre,Movie Cast,Started Date,Image File,Image Position");
+		
+		for (MovieInfo movie : movies) {
+			String[] cells = new String[12];
+			
+			cells[0] = movie.isFavorite() ? "Yes" : "No";
+			cells[1] = movie.getName();
+			cells[2] = movie.getStatus().toString();
+			cells[3] = movie.getDuration();
+			cells[4] = movie.getYear()+"";
+			cells[5] = "⭐⭐⭐⭐⭐⭐".substring(0, movie.getRate());
+			cells[6] = "";
+			cells[7] = "";
+			cells[8] = "";
+			cells[9] = "";
+			cells[10] = movie.getImagePath();
+			cells[11] = movie.getImagePosition()+"";
+			
+			System.out.println(String.join(",", cells));
+			if (cells[10] == null) cells[10] = "";
+			else if (cells[10].startsWith("movie-images")) cells[10] = cells[10].substring(13);
+			
+			bufferedWriter.write("\n"+String.join(",", cells));
+		}
+		
+				
+		bufferedWriter.close();
+		fileWriter.close();
 	}
 	
 }
