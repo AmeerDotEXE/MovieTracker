@@ -33,7 +33,16 @@ public class Theme {
 	public Color cardHover;
 	public Color cardSecondaryFG;
 
-	public Color movieStar;
+	public Color statusReview;
+	public Color statusReviewDot;
+	public Color statusMightWatch;
+	public Color statusMightWatchDot;
+	public Color statusWantToWatch;
+	public Color statusWantToWatchDot;
+	public Color statusWantToRewatch;
+	public Color statusWantToRewatchDot;
+	public Color statusWatched;
+	public Color statusWatchedDot;
 	
 	public static Theme getInstance() {
 		if (Theme.instance == null) {
@@ -46,22 +55,26 @@ public class Theme {
 	}
 }
 
-abstract class ThemeColors {
-	public Color applicationBackground;
-}
-
 
 
 class DarkTheme extends Theme {
 	public static Color z900 = new Color(24, 24, 27);
 	public static Color z800 = new Color(39, 39, 42);
 	public static Color z700 = new Color(63, 63, 70);
+	public static Color z600 = new Color(82, 82, 91);
 	public static Color z500 = new Color(113, 113, 122);
 	public static Color z200 = new Color(228, 228, 231);
 
+	public static Color g700 = new Color(21, 128, 61);
 	public static Color g600 = new Color(22, 163, 74);
 	public static Color g500 = new Color(34, 197, 94);
 	public static Color g400 = new Color(74, 222, 128);
+	
+	public static Color r700 = new Color(185, 28, 28);
+	public static Color r500 = new Color(239, 68, 68);
+	
+	public static Color b700 = new Color(29, 78, 216);
+	public static Color b500 = new Color(59, 130, 246);
 
 	DarkTheme() {
 		Theme.setInstance(this);
@@ -110,10 +123,10 @@ class DarkTheme extends Theme {
 		buttonSuccessPress = g400;
 		buttonSuccessHover = g600;
 
-		buttonBG = z800;
+		buttonBG = z700;
 		buttonFG = z200;
-		buttonPress = z700;
-		buttonHover = z900;
+		buttonPress = z600;
+		buttonHover = z800;
 		
 		applicationBG = z900;
 		applicationFG = Color.WHITE;
@@ -122,7 +135,16 @@ class DarkTheme extends Theme {
 		cardFG = new Color(250, 250, 250);
 		cardHover = z700;
 		cardSecondaryFG = z200;
-		
-		movieStar = new Color(234, 179, 8);
+
+		statusReview = g600;
+		statusReviewDot = g400;
+		statusMightWatch = g600;
+		statusMightWatchDot = g400;
+		statusWantToWatch = b500;
+		statusWantToWatchDot = b700;
+		statusWantToRewatch = b500;
+		statusWantToRewatchDot = b700;
+		statusWatched = r500;
+		statusWatchedDot = r700;
 	}
 }

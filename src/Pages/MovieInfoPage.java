@@ -8,6 +8,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
@@ -35,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 
 public class MovieInfoPage extends JPanel {
 
@@ -197,10 +199,54 @@ public class MovieInfoPage extends JPanel {
 		textFieldStyle(titleField);
 		titleField.setText("Terminator");
 		metadata.add(titleField);
+
+
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.setBackground(theme.cardBG);
+        LineBorder border = new LineBorder(theme.cardHover);
+		popupMenu.setBorder(border);
 		
 		status = new StatusPanel(MovieStatus.Want_to_Rewatch);
+		status.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				popupMenu.show(status, status.getX(), status.getY());
+			}
+		});
 		status.setBorder(new EmptyBorder(8, 0, 4, 0));
 		metadata.add(status);
+		
+		JPanel statusContainer = new JPanel();
+		statusContainer.setLayout(new BoxLayout(statusContainer, BoxLayout.Y_AXIS));
+		statusContainer.setBackground(theme.cardBG);
+		statusContainer.setBorder(new EmptyBorder(4, 4, 4, 4));
+		popupMenu.add(statusContainer);
+		
+		MovieStatus[] allStatuses = new MovieStatus[5];
+		allStatuses[0] = MovieStatus.Needs_Review;
+		allStatuses[1] = MovieStatus.Might_Watch;
+		allStatuses[2] = MovieStatus.Want_to_Watch;
+		allStatuses[3] = MovieStatus.Want_to_Rewatch;
+		allStatuses[4] = MovieStatus.Watched;
+
+		for (int i = 0; i < allStatuses.length; i++) {
+			MovieStatus selectedStatus = allStatuses[i];
+			
+			StatusPanel statusOption = new StatusPanel(selectedStatus);
+			statusOption.setBorder(new EmptyBorder(2, 2, 2, 2));
+			statusOption.setMaximumSize(new Dimension(200, 80));
+			
+			statusOption.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					movie.setStatus(selectedStatus);
+					status.updateStatus(selectedStatus);
+					popupMenu.setVisible(false);
+				}
+			});
+			
+			statusContainer.add(statusOption);
+		}
 
 		Box scoreStuff = Box.createHorizontalBox();
 		scoreStuff.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -364,6 +410,12 @@ public class MovieInfoPage extends JPanel {
 			star.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						updateStarSelector(0);
+						movie.setRate(0);
+						return;
+					}
+					
 					updateStarSelector(num);
 					movie.setRate(num);
 				}
@@ -466,4 +518,5 @@ public class MovieInfoPage extends JPanel {
 		txtField.setFont(new Font("Arial", Font.BOLD, 16));
 		txtField.setColumns(10);
 	}
+	
 }
