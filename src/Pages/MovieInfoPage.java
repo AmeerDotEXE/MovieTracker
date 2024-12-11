@@ -337,10 +337,11 @@ public class MovieInfoPage extends JPanel {
 
 	            // if the user selects a file
 	            if (r != JFileChooser.APPROVE_OPTION) return;
-	            String filePath = "movie-Images\\"+movie.getName()+".jpg";
+	            String oldFilePath = movie.getImagePath();
+	            String filePath = "movie-images/"+movie.getName()+".jpg";
 	            File newFile = new File(filePath);
 	            for (int i = 2; newFile.exists(); i++) {
-	            	filePath = "movie-Images\\"+movie.getName()+i+".jpg";
+	            	filePath = "movie-images/"+movie.getName()+i+".jpg";
 	            	newFile = new File(filePath);
 	            }
 	            
@@ -351,6 +352,9 @@ public class MovieInfoPage extends JPanel {
 					slider.setValue(50);
 					image.setImagePosition(50);
 					image.setImage(filePath);
+					
+					File oldImage = new File(oldFilePath);
+					oldImage.delete();
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}

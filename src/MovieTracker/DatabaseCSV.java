@@ -128,7 +128,6 @@ public class DatabaseCSV implements Database {
 			cells[10] = movie.getImagePath();
 			cells[11] = movie.getImagePosition()+"";
 			
-			System.out.println(String.join(",", cells));
 			if (cells[10] == null) cells[10] = "";
 			else if (cells[10].startsWith("movie-images")) cells[10] = cells[10].substring(13);
 			
