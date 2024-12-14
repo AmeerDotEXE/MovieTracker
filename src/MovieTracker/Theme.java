@@ -27,6 +27,7 @@ public class Theme {
 	
 	public Color applicationBG;
 	public Color applicationFG;
+	public Color applicationSecondaryFG;
 	public Color seperator;
 	public Color cardBG;
 	public Color cardFG;
@@ -63,7 +64,9 @@ class DarkTheme extends Theme {
 	public static Color z700 = new Color(63, 63, 70);
 	public static Color z600 = new Color(82, 82, 91);
 	public static Color z500 = new Color(113, 113, 122);
+	public static Color z300 = new Color(212, 212, 216);
 	public static Color z200 = new Color(228, 228, 231);
+	public static Color z100 = new Color(244, 244, 245);
 
 	public static Color g700 = new Color(21, 128, 61);
 	public static Color g600 = new Color(22, 163, 74);
@@ -130,11 +133,12 @@ class DarkTheme extends Theme {
 		
 		applicationBG = z900;
 		applicationFG = Color.WHITE;
+		applicationSecondaryFG = new Color(128, 128, 128);
 		seperator = z500;
 		cardBG = z800;
-		cardFG = new Color(250, 250, 250);
+		cardFG = z100;
 		cardHover = z700;
-		cardSecondaryFG = z200;
+		cardSecondaryFG = z300;
 
 		statusReview = g600;
 		statusReviewDot = g400;

@@ -7,10 +7,10 @@ public class MovieInfo {
 	private boolean favorite = false;
 	private MovieStatus status = MovieStatus.Needs_Review;
 	private int rate;
-	private int lastWatched;
+	private String lastWatched = null;
 	private String[] gerne = new String[4];
 	private String[] cast = new String[6];
-	private int firstWatched;
+	private String firstWatched = null;
 	private String imagePath;
 	private int imagePosition = 50;
 
@@ -29,10 +29,10 @@ public class MovieInfo {
 	public boolean isFavorite() { return favorite; }
 	public MovieStatus getStatus() { return status; }
 	public int getRate() { return rate; }
-	public int getLastWatched() { return lastWatched; }
+	public String getLastWatched() { return lastWatched; }
 	public String[] getGerne() { return gerne; }
 	public String[] getCast() { return cast; }
-	public int getFirstWatched() { return firstWatched; }
+	public String getFirstWatched() { return firstWatched; }
 	public String getImagePath() { return imagePath; }
 	public int getImagePosition() { return imagePosition; }
 
@@ -79,4 +79,6 @@ public class MovieInfo {
 	public void setRate(int rate) { this.rate = rate; }
 	public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 	public void setImagePosition(int imagePosition) { this.imagePosition = imagePosition; }
+	public void setLastWatched(String lastWatched) { this.lastWatched = lastWatched; }
+	public void setFirstWatched(String firstWatched) { this.firstWatched = firstWatched; }
 }

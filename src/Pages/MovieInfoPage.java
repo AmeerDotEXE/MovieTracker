@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileFilter;
 import Components.ImagePanel;
 import Components.RoundedPanel;
 import Components.StatusPanel;
+import Components.TextField;
 import MovieTracker.Theme;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
@@ -28,6 +29,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Box;
@@ -46,10 +51,10 @@ public class MovieInfoPage extends JPanel {
 	private MovieCard movieCard;
 	private MovieInfo movie;
 	private JTextField titleField;
-	private JTextField durationField;
-	private JTextField yearField;
-	private JTextField txtFirstWatch;
-	private JTextField txtLastWatch;
+	private TextField durationField;
+	private TextField yearField;
+	private TextField firstWatch;
+	private TextField lastWatch;
 	private JTextField txtGerne;
 	private JTextField txtCast;
 	private ImagePanel image;
@@ -176,12 +181,32 @@ public class MovieInfoPage extends JPanel {
 		if (movie.isFavorite()) favBtn.setImage(theme.favoriteOn);
 		else favBtn.setImage(theme.favoriteOff);
 		updateStarSelector(movie.getRate());
-		durationField.setText(movie.getDuration());
-		yearField.setText(movie.getYear()+"");
+		if (movie.getDurationMins() == 0) {					
+			durationField.setText("");
+		} else durationField.setText(movie.getDuration());
+		if (movie.getYear() == 0) {					
+			yearField.setText("");
+		} else yearField.setText(movie.getYear()+"");
 		image.setImage(movie.getImagePath());
 		slider.setValue(movie.getImagePosition());
-//		txtFirstWatch.setText(movie.getName());
-//		txtLastWatch.setText(movie.getName());
+
+
+		SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+		SimpleDateFormat targetFormat = new SimpleDateFormat("MMMM d, yyyy");
+		if (movie.getFirstWatched() != null) {
+			try {
+				Date date = targetFormat.parse(movie.getFirstWatched());
+				String originalDate = originalFormat.format(date);
+				firstWatch.setText(originalDate);
+			} catch (ParseException e1) {}
+		} else firstWatch.setText("");
+		if (movie.getLastWatched() != null) {
+			try {
+				Date date = targetFormat.parse(movie.getLastWatched());
+				String originalDate = originalFormat.format(date);
+				lastWatch.setText(originalDate);
+			} catch (ParseException e1) {}
+		} else lastWatch.setText("");
 	}
 	
 	
@@ -448,19 +473,21 @@ public class MovieInfoPage extends JPanel {
 		Box infoArea = Box.createVerticalBox();
 		infoArea.setOpaque(false);
 		
-		durationField = new JTextField();
-		textFieldStyle(durationField);
-		durationField.setHorizontalAlignment(SwingConstants.CENTER);
-		durationField.setText("2h 0m");
+		durationField = new TextField();
+		durationField.setPlaceHolder("Duration");
+		durationField.setPlaceHolderColor(theme.applicationSecondaryFG);
+		durationField.setFont(new Font("Arial", Font.BOLD, 16));
+		durationField.setText("");
 		infoArea.add(durationField);
 		
 		Component verticalStrut = Box.createVerticalStrut(8);
 		infoArea.add(verticalStrut);
 		
-		yearField = new JTextField();
-		textFieldStyle(yearField);
-		yearField.setHorizontalAlignment(SwingConstants.CENTER);
-		yearField.setText("2000");
+		yearField = new TextField();
+		yearField.setPlaceHolder("Year");
+		yearField.setPlaceHolderColor(theme.applicationSecondaryFG);
+		yearField.setFont(new Font("Arial", Font.BOLD, 16));
+		yearField.setText("");
 		infoArea.add(yearField);
 		
 
@@ -470,7 +497,9 @@ public class MovieInfoPage extends JPanel {
 				if (newDuration == null) return;
 
 				movie.setDuration(newDuration);
-				durationField.setText(movie.getDuration());
+				if (movie.getDurationMins() == 0) {					
+					durationField.setText("");
+				} else durationField.setText(movie.getDuration());
 			}
 		});
 		yearField.addActionListener(new ActionListener() {
@@ -483,7 +512,9 @@ public class MovieInfoPage extends JPanel {
 					year = Integer.parseInt(newYear);
 				} catch (Exception ex) {}
 				movie.setYear(year);
-				yearField.setText(year+"");
+				if (movie.getYear() == 0) {					
+					yearField.setText("");
+				} else yearField.setText(year+"");
 			}
 		});
 		
@@ -494,20 +525,74 @@ public class MovieInfoPage extends JPanel {
 		Box dateArea = Box.createVerticalBox();
 		dateArea.setOpaque(false);
 		
-		txtFirstWatch = new JTextField();
-		textFieldStyle(txtFirstWatch);
-		txtFirstWatch.setHorizontalAlignment(SwingConstants.CENTER);
-		txtFirstWatch.setText("First Watch");
-		dateArea.add(txtFirstWatch);
+		firstWatch = new TextField();
+		firstWatch.setPlaceHolder("First Watch Date");
+		firstWatch.setPlaceHolderColor(theme.applicationSecondaryFG);
+		firstWatch.setFont(new Font("Arial", Font.BOLD, 16));
+		firstWatch.setText("");
+		dateArea.add(firstWatch);
 		
 		Component verticalStrut = Box.createVerticalStrut(8);
 		dateArea.add(verticalStrut);
 		
-		txtLastWatch = new JTextField();
-		textFieldStyle(txtLastWatch);
-		txtLastWatch.setHorizontalAlignment(SwingConstants.CENTER);
-		txtLastWatch.setText("Last Watch");
-		dateArea.add(txtLastWatch);
+		lastWatch = new TextField();
+		lastWatch.setPlaceHolder("Last Watch Date");
+		lastWatch.setPlaceHolderColor(theme.applicationSecondaryFG);
+		lastWatch.setFont(new Font("Arial", Font.BOLD, 16));
+		lastWatch.setText("");
+		dateArea.add(lastWatch);
+		
+
+		firstWatch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String newDateTxt = firstWatch.getText();
+				if (newDateTxt == null) return;
+				
+				if (newDateTxt.equals("")) {
+					movie.setFirstWatched(null);
+					firstWatch.setText("");
+					return;
+				}
+
+				SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+				SimpleDateFormat targetFormat = new SimpleDateFormat("MMMM d, yyyy");
+				Date date;
+				try {
+					date = originalFormat.parse(newDateTxt);
+				} catch (ParseException e1) {
+					date = new Date();
+				}
+				String formattedDate = targetFormat.format(date);
+				String originalDate = originalFormat.format(date);
+				movie.setFirstWatched(formattedDate);
+				firstWatch.setText(originalDate);
+			}
+		});
+		lastWatch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String newDateTxt = lastWatch.getText();
+				if (newDateTxt == null) return;
+				
+				if (newDateTxt.equals("")) {
+					movie.setLastWatched(null);
+					lastWatch.setText("");
+					return;
+				}
+
+				SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+				SimpleDateFormat targetFormat = new SimpleDateFormat("MMMM d, yyyy");
+				Date date;
+				try {
+					date = originalFormat.parse(newDateTxt);
+				} catch (ParseException e1) {
+					date = new Date();
+				}
+				String formattedDate = targetFormat.format(date);
+				String originalDate = originalFormat.format(date);
+				movie.setLastWatched(formattedDate);
+				lastWatch.setText(originalDate);
+			}
+		});
 		
 		return dateArea;
 	}

@@ -58,6 +58,8 @@ public class DatabaseCSV implements Database {
 			if (cells[3] != "") movie.setDuration(cells[3]);
 			if (cells[4] != "") movie.setYear(Integer.parseInt(cells[4]));
 			if (cells[5] != "") movie.setRate(cells[5].length());
+			if (cells[6] != "") movie.setLastWatched(cells[6].substring(1, cells[6].length()-1));
+			if (cells[9] != "") movie.setFirstWatched(cells[9].substring(1, cells[9].length()-1));
 			if (cells[10] != "") movie.setImagePath("movie-images/"+cells[10]);
 			if (cells[11] != "") movie.setImagePosition(Integer.parseInt(cells[11]));
 			movies.add(movie);
@@ -121,12 +123,18 @@ public class DatabaseCSV implements Database {
 			cells[3] = movie.getDuration();
 			cells[4] = movie.getYear()+"";
 			cells[5] = "⭐⭐⭐⭐⭐⭐".substring(0, movie.getRate());
-			cells[6] = "";
+			cells[6] = movie.getLastWatched();
 			cells[7] = "";
 			cells[8] = "";
-			cells[9] = "";
+			cells[9] = movie.getFirstWatched();
 			cells[10] = movie.getImagePath();
 			cells[11] = movie.getImagePosition()+"";
+			
+			if (cells[6] == null) cells[6] = "";
+			else cells[6] = '"'+cells[6]+'"';
+
+			if (cells[9] == null) cells[9] = "";
+			else cells[9] = '"'+cells[9]+'"';
 			
 			if (cells[10] == null) cells[10] = "";
 			else if (cells[10].startsWith("movie-images")) cells[10] = cells[10].substring(13);

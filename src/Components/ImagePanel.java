@@ -23,7 +23,7 @@ public class ImagePanel extends JPanel {
 			image = ImageIO.read(imageFile);
 		} catch (IOException ex) {
 			// handle exception...
-			System.out.print("Image Not Found: "+imagePath);
+			System.out.println("Image Not Found: "+imagePath);
 		}
 	}
 	public ImagePanel(BufferedImage image) {
