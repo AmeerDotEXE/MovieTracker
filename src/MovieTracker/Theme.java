@@ -1,8 +1,7 @@
 package MovieTracker;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 import javax.imageio.ImageIO;
 
 
@@ -58,6 +57,18 @@ public class Theme {
 	protected static void setInstance(Theme instance) {
 		Theme.instance = instance;
 	}
+	
+	BufferedImage loadLocalImage(String filename) {
+		BufferedImage image = null;
+		try {
+			URL imageFile = getClass().getResource("/assets/"+filename);
+			image = ImageIO.read(imageFile);
+		} catch (Exception ex) {
+			// handle exception...
+			System.out.println(filename+" image not found.");
+		}
+		return image;
+	}
 }
 
 
@@ -87,46 +98,11 @@ class DarkTheme extends Theme {
 
 	DarkTheme() {
 		Theme.setInstance(this);
-		try {
-			File imageFile = new File("assets/star-dark.jpg");
-			BufferedImage image = ImageIO.read(imageFile);
-			star = image;
-		} catch (IOException ex) {
-			// handle exception...
-			System.out.print("Star image not found.");
-		}
-		try {
-			File imageFile = new File("assets/star-dark-empty.jpg");
-			BufferedImage image = ImageIO.read(imageFile);
-			starEmpty = image;
-		} catch (IOException ex) {
-			// handle exception...
-			System.out.print("Empty Star image not found.");
-		}
-		try {
-			File imageFile = new File("assets/star-dark-super.jpg");
-			BufferedImage image = ImageIO.read(imageFile);
-			starSuper = image;
-		} catch (IOException ex) {
-			// handle exception...
-			System.out.print("Super Star image not found.");
-		}
-		try {
-			File imageFile = new File("assets/fav-dark-on.jpg");
-			BufferedImage image = ImageIO.read(imageFile);
-			favoriteOn = image;
-		} catch (IOException ex) {
-			// handle exception...
-			System.out.print("Favorite On image not found.");
-		}
-		try {
-			File imageFile = new File("assets/fav-dark-off.jpg");
-			BufferedImage image = ImageIO.read(imageFile);
-			favoriteOff = image;
-		} catch (IOException ex) {
-			// handle exception...
-			System.out.print("Favorite Off image not found.");
-		}
+		star = loadLocalImage("star-dark.jpg");
+		starEmpty = loadLocalImage("star-dark-empty.jpg");
+		starSuper = loadLocalImage("star-dark-super.jpg");
+		favoriteOn = loadLocalImage("fav-dark-on.jpg");
+		favoriteOff = loadLocalImage("fav-dark-off.jpg");
 		
 		buttonSuccessBG = g500;
 		buttonSuccessPress = g400;

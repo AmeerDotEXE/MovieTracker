@@ -83,7 +83,7 @@ public class MovieInfoPage extends JPanel {
 		JPanel imageField = createImageField();
 		row1.add(imageField);
 		
-		JPanel metadata = createMetadataArea();
+		Box metadata = createMetadataArea();
 		row1.add(metadata);
 		
 		JPanel row2 = new JPanel();
@@ -166,13 +166,13 @@ public class MovieInfoPage extends JPanel {
 	
 	
 	
- 	JPanel createMetadataArea() {
-		JPanel metadata = new JPanel();
+ 	Box createMetadataArea() {
+//		JPanel metadata = new JPanel();
+		Box metadata = Box.createVerticalBox();
 		metadata.setBorder(new EmptyBorder(8, 0, 0, 0));
 		metadata.setPreferredSize(new Dimension(200, 99));
-		metadata.setOpaque(false);
+//		metadata.setOpaque(false);
 		// row1.add(metadata);
-		metadata.setLayout(new BoxLayout(metadata, BoxLayout.Y_AXIS));
 //		metadata.setLayout(new BoxLayout(metadata, BoxLayout.Y_AXIS));
 		
 		titleField = new JTextField();
