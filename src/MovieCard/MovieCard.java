@@ -10,7 +10,6 @@ import java.awt.Font;
 
 import Components.ImagePanel;
 import Components.StatusPanel;
-import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 import Pages.Mainframe;
 
@@ -260,8 +259,6 @@ public class MovieCard extends JPanel {
 			durationLine.setVisible(true);
 			durationText.setText(info.getDuration());
 		}
-		
-		MovieManager.getInstance().saveMovies();
 	}
 	
 

@@ -17,6 +17,7 @@ import Components.ImagePanel;
 import Components.RoundedPanel;
 import Components.StatusPanel;
 import Components.TextField;
+import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
@@ -686,7 +687,9 @@ public class MovieInfoPage extends JPanel {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//
+				MovieManager.getInstance().removeMovie(movieCard);
+				MovieManager.getInstance().saveMovies();
+				Mainframe.showMoviePage();
 			}
 		});
 		deleteButton.setFocusable(false);
@@ -719,6 +722,7 @@ public class MovieInfoPage extends JPanel {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				MovieManager.getInstance().saveMovies();
 				movieCard.updateMovieData();
 				Mainframe.showMoviePage();
 			}
