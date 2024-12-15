@@ -24,6 +24,10 @@ public class Theme {
 	public Color buttonFG;
 	public Color buttonPress;
 	public Color buttonHover;
+
+	public Color buttonDangerBG;
+	public Color buttonDangerPress;
+	public Color buttonDangerHover;
 	
 	public Color applicationBG;
 	public Color applicationFG;
@@ -74,7 +78,9 @@ class DarkTheme extends Theme {
 	public static Color g400 = new Color(74, 222, 128);
 	
 	public static Color r700 = new Color(185, 28, 28);
+	public static Color r600 = new Color(220, 38, 38);
 	public static Color r500 = new Color(239, 68, 68);
+	public static Color r400 = new Color(248, 113, 113);
 	
 	public static Color b700 = new Color(29, 78, 216);
 	public static Color b500 = new Color(59, 130, 246);
@@ -130,6 +136,10 @@ class DarkTheme extends Theme {
 		buttonFG = z200;
 		buttonPress = z600;
 		buttonHover = z800;
+
+		buttonDangerBG = r500;
+		buttonDangerPress = r400;
+		buttonDangerHover = r600;
 		
 		applicationBG = z900;
 		applicationFG = Color.WHITE;

@@ -1,5 +1,7 @@
 package MovieCard;
 
+import java.util.ArrayList;
+
 public class MovieInfo {
 	private String name = "No Name";
 	private int durationMins;
@@ -8,8 +10,8 @@ public class MovieInfo {
 	private MovieStatus status = MovieStatus.Needs_Review;
 	private int rate;
 	private String lastWatched = null;
-	private String[] gerne = new String[4];
-	private String[] cast = new String[6];
+	private ArrayList<String> gerne = new ArrayList<String>();
+	private ArrayList<String> cast = new ArrayList<String>();
 	private String firstWatched = null;
 	private String imagePath;
 	private int imagePosition = 50;
@@ -30,8 +32,8 @@ public class MovieInfo {
 	public MovieStatus getStatus() { return status; }
 	public int getRate() { return rate; }
 	public String getLastWatched() { return lastWatched; }
-	public String[] getGerne() { return gerne; }
-	public String[] getCast() { return cast; }
+	public ArrayList<String> getGerne() { return gerne; }
+	public ArrayList<String> getCast() { return cast; }
 	public String getFirstWatched() { return firstWatched; }
 	public String getImagePath() { return imagePath; }
 	public int getImagePosition() { return imagePosition; }

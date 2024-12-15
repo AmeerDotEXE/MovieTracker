@@ -41,6 +41,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 
 public class MovieInfoPage extends JPanel {
@@ -55,8 +56,8 @@ public class MovieInfoPage extends JPanel {
 	private TextField yearField;
 	private TextField firstWatch;
 	private TextField lastWatch;
-	private JTextField txtGerne;
-	private JTextField txtCast;
+	private JPanel panelGerne;
+	private JPanel panelCast;
 	private ImagePanel image;
 	private JSlider slider;
 	private ImagePanel favBtn;
@@ -102,73 +103,14 @@ public class MovieInfoPage extends JPanel {
 		Box dateArea = createDateArea();
 		row2.add(dateArea);
 		
-		JPanel row3 = new JPanel();
-		row3.setVisible(false);
-		row3.setOpaque(false);
+		Box row3 = createTagsRow();
 		add(row3);
-		
-		txtGerne = new JTextField();
-		txtGerne.setText("Gerne");
-		txtGerne.setPreferredSize(new Dimension(128, 18));
-		txtGerne.setOpaque(false);
-		txtGerne.setMaximumSize(new Dimension(9999, 18));
-		txtGerne.setForeground(Color.WHITE);
-		txtGerne.setFont(new Font("Arial", Font.BOLD, 16));
-		txtGerne.setColumns(10);
-		txtGerne.setBorder(null);
-		row3.add(txtGerne);
-		
-		txtCast = new JTextField();
-		txtCast.setText("Cast");
-		txtCast.setPreferredSize(new Dimension(128, 18));
-		txtCast.setOpaque(false);
-		txtCast.setMaximumSize(new Dimension(9999, 18));
-		txtCast.setForeground(Color.WHITE);
-		txtCast.setFont(new Font("Arial", Font.BOLD, 16));
-		txtCast.setColumns(10);
-		txtCast.setBorder(null);
-		row3.add(txtCast);
 		
 		Component verticalGlue = Box.createVerticalGlue();
 		add(verticalGlue);
 		
-		JPanel navPanel = new JPanel();
-		navPanel.setMaximumSize(new Dimension(32767, 2));
-		FlowLayout flowLayout = (FlowLayout) navPanel.getLayout();
-		flowLayout.setAlignment(FlowLayout.RIGHT);
-		navPanel.setOpaque(false);
+		Box navPanel = createNavigaionButtons();
 		add(navPanel);
-		
-		JButton btnNewButton = new JButton("Done");
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonHover);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonBG);
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonPress);
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonBG);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				movieCard.updateMovieData();
-				Mainframe.showMoviePage();
-			}
-		});
-		btnNewButton.setFocusable(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBackground(theme.buttonBG);
-		btnNewButton.setForeground(theme.buttonFG);
-		navPanel.add(btnNewButton);
 	}
 	
 	public void selectMovie(MovieCard movieCard) {
@@ -189,6 +131,19 @@ public class MovieInfoPage extends JPanel {
 		} else yearField.setText(movie.getYear()+"");
 		image.setImage(movie.getImagePath());
 		slider.setValue(movie.getImagePosition());
+		
+		while (panelGerne.getComponentCount() > 1) {
+			panelGerne.remove(1);
+		}
+		while (panelCast.getComponentCount() > 1) {
+			panelCast.remove(1);
+		}
+		for (String tagTxt : movie.getGerne()) {
+			createTag(tagTxt, true);
+		}
+		for (String tagTxt : movie.getCast()) {
+			createTag(tagTxt, false);
+		}
 
 
 		SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
@@ -378,6 +333,7 @@ public class MovieInfoPage extends JPanel {
 					image.setImagePosition(50);
 					image.setImage(filePath);
 					
+					if (oldFilePath == null || oldFilePath == "") return;
 					File oldImage = new File(oldFilePath);
 					oldImage.delete();
 				} catch (IOException ex) {
@@ -596,6 +552,186 @@ public class MovieInfoPage extends JPanel {
 		
 		return dateArea;
 	}
+	
+	
+	Box createTagsRow() {
+		Box row3 = Box.createVerticalBox();
+		row3.setBorder(new EmptyBorder(8, 8, 0, 4));
+//		row3.setPreferredSize(new Dimension(999, 2));
+		
+		panelGerne = new JPanel();
+		panelGerne.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelGerne.setMinimumSize(new Dimension(10, 25));
+		panelGerne.setMaximumSize(new Dimension(9999, 50));
+		panelGerne.setOpaque(false);
+		row3.add(panelGerne);
+		
+		TextField txtGerne = new TextField();
+		txtGerne.setPlaceHolder("Gerne");
+		txtGerne.setPlaceHolderColor(theme.applicationSecondaryFG);
+		txtGerne.setHorizontalAlignment(SwingConstants.LEFT);
+		txtGerne.setFont(new Font("Arial", Font.BOLD, 16));
+		txtGerne.setColumns(5);
+		txtGerne.setText("");
+		panelGerne.add(txtGerne);
+		
+
+		panelCast = new JPanel();
+		panelCast.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelCast.setMinimumSize(new Dimension(10, 25));
+		panelCast.setMaximumSize(new Dimension(9999, 50));
+//		panelCast.setPreferredSize(new Dimension(10, 50));
+		panelCast.setOpaque(false);
+		row3.add(panelCast);
+		
+		TextField txtCast = new TextField();
+		txtCast.setPlaceHolder("Cast");
+		txtCast.setPlaceHolderColor(theme.applicationSecondaryFG);
+		txtCast.setHorizontalAlignment(SwingConstants.LEFT);
+		txtCast.setFont(new Font("Arial", Font.BOLD, 16));
+		txtCast.setColumns(5);
+		txtCast.setText("");
+		panelCast.add(txtCast);
+
+		txtGerne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tagTxt = txtGerne.getText();
+				if (tagTxt == null || tagTxt.equals("")) return;
+				if (movie.getGerne().size() >= 4) return;
+				
+				movie.getGerne().add(tagTxt);
+				createTag(tagTxt, true);
+				txtGerne.setText("");
+				txtGerne.requestFocus();
+			}
+		});
+		txtCast.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tagTxt = txtCast.getText();
+				if (tagTxt == null || tagTxt.equals("")) return;
+				if (movie.getCast().size() >= 6) return;
+				
+				movie.getCast().add(tagTxt);
+				createTag(tagTxt, false);
+				txtCast.setText("");
+				txtCast.requestFocus();
+			}
+		});
+		
+		return row3;
+	}
+	
+	void createTag(String text, boolean isGerne) {
+		RoundedPanel tagContainer = new RoundedPanel(8);
+		tagContainer.setBackground(theme.buttonBG);
+		FlowLayout flowLayout_1 = (FlowLayout) tagContainer.getLayout();
+		flowLayout_1.setVgap(2);
+		flowLayout_1.setHgap(2);
+		
+		JLabel tagText = new JLabel(text);
+		tagText.setBorder(new EmptyBorder(0, 2, 0, 2));
+		tagText.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		tagText.setForeground(theme.buttonFG);
+		tagContainer.add(tagText);
+		
+		tagContainer.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() != MouseEvent.BUTTON3) return;
+
+				if (isGerne) {
+					panelGerne.remove(tagContainer);
+					movie.getGerne().remove(text);
+					panelGerne.revalidate();
+				} else {
+					panelCast.remove(tagContainer);
+					movie.getCast().remove(text);
+					panelCast.revalidate();
+				}
+			}
+		});
+		
+		if (isGerne) {
+			panelGerne.add(tagContainer);
+			panelGerne.revalidate();
+		} else {
+			panelCast.add(tagContainer);
+			panelCast.revalidate();
+		}
+	}
+	
+	
+	Box createNavigaionButtons() {
+		Box navPanel = Box.createHorizontalBox();
+		navPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		JButton deleteButton = new JButton("Delete");
+		deleteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		deleteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				deleteButton.setBackground(theme.buttonDangerHover);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				deleteButton.setBackground(theme.buttonDangerBG);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				deleteButton.setBackground(theme.buttonDangerPress);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				deleteButton.setBackground(theme.buttonDangerBG);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//
+			}
+		});
+		deleteButton.setFocusable(false);
+		deleteButton.setBorderPainted(false);
+		deleteButton.setBackground(theme.buttonDangerBG);
+//		deleteButton.setForeground(theme.buttonFG);
+		navPanel.add(deleteButton);
+
+		Component horizontalGlue = Box.createHorizontalGlue();
+		navPanel.add(horizontalGlue);
+		
+		JButton doneButton = new JButton("Done");
+		doneButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		doneButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				doneButton.setBackground(theme.buttonHover);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				doneButton.setBackground(theme.buttonBG);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				doneButton.setBackground(theme.buttonPress);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				doneButton.setBackground(theme.buttonBG);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				movieCard.updateMovieData();
+				Mainframe.showMoviePage();
+			}
+		});
+		doneButton.setFocusable(false);
+		doneButton.setBorderPainted(false);
+		doneButton.setBackground(theme.buttonBG);
+		doneButton.setForeground(theme.buttonFG);
+		navPanel.add(doneButton);
+		
+		return navPanel;
+	}
+	
 	
 	void textFieldStyle(JTextField txtField) {
 		txtField.setCaretColor(Color.WHITE);
