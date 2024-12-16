@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import MovieCard.MovieCard;
 import MovieCard.MovieInfo;
+import Pages.Mainframe;
 
 public class MovieManager {
 	private static MovieManager instance = new MovieManager();
@@ -31,6 +32,12 @@ public class MovieManager {
 			cardsPage.add(new MovieCard(movie));
 		}
 		
+	}
+	public void addMovie(MovieInfo movie) {
+		movies.addFirst(movie);
+		MovieCard movieCard = new MovieCard(movie);
+		cardsPage.add(movieCard, 0);
+		Mainframe.showMovieInfo(movieCard);
 	}
 	public void saveMovies() {
 		db.setMovies(movies);

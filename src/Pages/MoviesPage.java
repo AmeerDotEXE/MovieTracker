@@ -20,6 +20,7 @@ import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import MovieCard.MovieInfo;
 import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 
@@ -62,6 +63,10 @@ public class MoviesPage extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				btnNewButton.setBackground(theme.buttonSuccessBG);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MovieManager.getInstance().addMovie(new MovieInfo("No Name"));
 			}
 		});
 		btnNewButton.setFocusable(false);
