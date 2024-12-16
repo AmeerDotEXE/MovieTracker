@@ -4,11 +4,14 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.function.Predicate;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,59 +23,33 @@ import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import MovieCard.MovieCard;
 import MovieCard.MovieInfo;
+import MovieCard.MovieStatus;
 import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 
 public class MoviesPage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	Theme theme;
+	private JPanel moviesContainer;
+	private boolean isFiltering = false;
+	private LinkedList<MovieCard> movieCards = new LinkedList<MovieCard>();
 
 	/**
 	 * Create the panel.
 	 */
 	public MoviesPage() {
-		Theme theme = Theme.getInstance();
+		theme = Theme.getInstance();
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(theme.applicationBG);
 		setBorder(null);
 		
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		flowLayout.setAlignment(FlowLayout.RIGHT);
-		panel.setMaximumSize(new Dimension(32767, 32));
-		add(panel);
-		
-		JButton btnNewButton = new JButton("Add Movie");
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonSuccessHover);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonSuccessBG);
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonSuccessPress);
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btnNewButton.setBackground(theme.buttonSuccessBG);
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MovieManager.getInstance().addMovie(new MovieInfo("No Name"));
-			}
-		});
-		btnNewButton.setFocusable(false);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setBackground(theme.buttonSuccessBG);
-		panel.add(btnNewButton);
+		Box controlBar = createControlBar();
+		add(controlBar);
 		
 		Component verticalStrut_1_1 = Box.createVerticalStrut(4);
 		add(verticalStrut_1_1);
@@ -93,14 +70,27 @@ public class MoviesPage extends JPanel {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		add(scrollPane);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new EmptyBorder(4, 4, 4, 4));
-		panel_1.setBackground(theme.applicationBG);
-		scrollPane.setViewportView(panel_1);
-		panel_1.setMaximumSize(scrollPane.getSize());
-		panel_1.setLayout(new GridLayout(0, 3, 4, 4));
+		moviesContainer = new JPanel() {
+			private static final long serialVersionUID = -1055015007625188194L;
+			
+			@Override
+			public Component add(Component comp) {
+				if (comp instanceof MovieCard && !isFiltering) movieCards.add((MovieCard)comp);
+				return super.add(comp);
+			}
+			@Override
+			public Component add(Component comp, int index) {
+				if (comp instanceof MovieCard && !isFiltering) movieCards.add(index, (MovieCard)comp);
+				return super.add(comp, index);
+			}
+		};
+		moviesContainer.setBorder(new EmptyBorder(4, 4, 4, 4));
+		moviesContainer.setBackground(theme.applicationBG);
+		scrollPane.setViewportView(moviesContainer);
+		moviesContainer.setMaximumSize(scrollPane.getSize());
+		moviesContainer.setLayout(new GridLayout(0, 3, 4, 4));
 		
-		MovieManager.getInstance().generateMovieCards(panel_1);
+		MovieManager.getInstance().generateMovieCards(moviesContainer);
 		
 		JPanel footer = new JPanel();
 		footer.setBorder(new EmptyBorder(4, 0, 0, 0));
@@ -128,9 +118,101 @@ public class MoviesPage extends JPanel {
 				if (getWidth() > 912) columns = 6;
 				else if (getWidth() > 768) columns = 5;
 				else if (getWidth() > 624) columns = 4;
-				panel_1.setLayout(new GridLayout(0, columns, 4, 4));
+				moviesContainer.setLayout(new GridLayout(0, columns, 4, 4));
 			}
 		});
+	}
+	
+	Box createControlBar() {
+		Box controlBar = Box.createHorizontalBox();
+		controlBar.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		JButton watchNextButton = new JButton("Watch Next");
+		watchNextButton.setBorder(new EmptyBorder(4, 8, 0, 8));
+		watchNextButton.setForeground(theme.applicationSecondaryFG);
+		watchNextButton.setOpaque(false);
+		watchNextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		watchNextButton.setFocusable(false);
+		watchNextButton.setBorderPainted(false);
+		watchNextButton.setFont(new Font("Arial", Font.BOLD, 16));
+		controlBar.add(watchNextButton);
+		
+		JButton listAllButton = new JButton("All Movies");
+		watchNextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		listAllButton.setOpaque(false);
+		listAllButton.setForeground(theme.applicationFG);
+		listAllButton.setFont(new Font("Arial", Font.BOLD, 16));
+		listAllButton.setFocusable(false);
+		listAllButton.setBorderPainted(false);
+		listAllButton.setBorder(new EmptyBorder(4, 8, 0, 8));
+		controlBar.add(listAllButton);
+		
+		Component horizontalGlue = Box.createHorizontalGlue();
+		controlBar.add(horizontalGlue);
+		
+		JButton addMovieButton = new JButton("Add Movie");
+		addMovieButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		addMovieButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				addMovieButton.setBackground(theme.buttonSuccessHover);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				addMovieButton.setBackground(theme.buttonSuccessBG);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				addMovieButton.setBackground(theme.buttonSuccessPress);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				addMovieButton.setBackground(theme.buttonSuccessBG);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MovieManager.getInstance().addMovie(new MovieInfo("No Name"));
+			}
+		});
+		addMovieButton.setFocusable(false);
+		addMovieButton.setBorderPainted(false);
+		addMovieButton.setBackground(theme.buttonSuccessBG);
+		controlBar.add(addMovieButton);
+		
+		listAllButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				listAllButton.setForeground(theme.applicationFG);
+				watchNextButton.setForeground(theme.applicationSecondaryFG);
+				
+				updateFilter(m -> true);
+			}
+		});
+		watchNextButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				watchNextButton.setForeground(theme.applicationFG);
+				listAllButton.setForeground(theme.applicationSecondaryFG);
+				
+				updateFilter(m -> 
+					m.getMovie().getStatus() == MovieStatus.Might_Watch ||
+					m.getMovie().getStatus() == MovieStatus.Want_to_Watch ||
+					m.getMovie().getStatus() == MovieStatus.Want_to_Rewatch
+				);
+			}
+		});
+		
+		return controlBar;
+	}
+	
+	void updateFilter(Predicate<? super MovieCard> filter) {
+		isFiltering = true;
+		moviesContainer.removeAll();
+		for (MovieCard movieCard : movieCards) {
+			if (filter.test(movieCard)) moviesContainer.add(movieCard);
+		}
+		isFiltering = false;
+		moviesContainer.revalidate();
 	}
 
 }
