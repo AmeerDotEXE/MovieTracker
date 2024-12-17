@@ -28,9 +28,10 @@ public class MovieManager {
 			cardsPage.add(new MovieCard(movie));
 		}
 
-		for (MovieInfo movie : movies) {
-			cardsPage.add(new MovieCard(movie));
-		}
+		// for debugging purposes
+//		for (MovieInfo movie : movies) {
+//			cardsPage.add(new MovieCard(movie));
+//		}
 		
 	}
 	public void addMovie(MovieInfo movie) {
