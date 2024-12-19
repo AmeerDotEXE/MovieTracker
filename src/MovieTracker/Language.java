@@ -35,6 +35,9 @@ public class Language {
 			case "en":
 				Language.instance = new EnLanguage();
 				break;
+			case "tr":
+				Language.instance = new TrLanguage();
+				break;
 		}
 	}
 	
@@ -63,5 +66,31 @@ class EnLanguage extends Language {
 		inputLastWatchDate = "Last Watch Date";
 		inputGenre = "Genre";
 		inputCast = "Cast";
+	}
+}
+
+class TrLanguage extends Language {
+	TrLanguage() {
+		applicationTitle = "Film Arşivi";
+		
+		statusReview = "İnceleme Gerekli";
+		statusMightWatch = "İzlenebilir";
+		statusWantToWatch = "İzlemek İstiyorum";
+		statusWantToRewatch = "Tekrar İzle";
+		statusWatched = "İzlendi";
+		
+		tabWatchNext = "Sonrakini İzle";
+		tabAllMovies = "Tüm Filmler";
+		
+		buttonAddMovie = "Film Ekle";
+		buttonDelete = "Sil";
+		buttonDone = "Bitti";
+		
+		inputDuration = "Süre";
+		inputYear = "Yıl";
+		inputFirstWatchDate = "İlk İzleme Tarihi";
+		inputLastWatchDate = "Son İzleme Tarihi";
+		inputGenre = "Tür";
+		inputCast = "Aktörler";
 	}
 }
