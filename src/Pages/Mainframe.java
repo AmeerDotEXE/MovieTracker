@@ -28,6 +28,14 @@ public class Mainframe extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			
+			if (arg.equalsIgnoreCase("--lang")) {
+				i++;
+				Language.setLanguageCode(args[i].toLowerCase());
+			}
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
