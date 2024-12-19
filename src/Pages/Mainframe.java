@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import MovieCard.MovieCard;
+import MovieTracker.Language;
 import MovieTracker.Theme;
 
 import javax.swing.UIManager;
@@ -49,7 +50,7 @@ public class Mainframe extends JFrame {
 		theme = Theme.getInstance();
 		
 		setBackground(theme.applicationBG);
-		setTitle("Movie Tracker");
+		setTitle(Language.applicationTitle);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(480, 360);
         setMinimumSize(new Dimension(480, 360));

@@ -17,6 +17,7 @@ import Components.ImagePanel;
 import Components.RoundedPanel;
 import Components.StatusPanel;
 import Components.TextField;
+import MovieTracker.Language;
 import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 import javax.swing.BoxLayout;
@@ -57,7 +58,7 @@ public class MovieInfoPage extends JPanel {
 	private TextField yearField;
 	private TextField firstWatch;
 	private TextField lastWatch;
-	private JPanel panelGerne;
+	private JPanel panelGenre;
 	private JPanel panelCast;
 	private ImagePanel image;
 	private JSlider slider;
@@ -133,13 +134,13 @@ public class MovieInfoPage extends JPanel {
 		image.setImage(movie.getImagePath());
 		slider.setValue(movie.getImagePosition());
 		
-		while (panelGerne.getComponentCount() > 1) {
-			panelGerne.remove(1);
+		while (panelGenre.getComponentCount() > 1) {
+			panelGenre.remove(1);
 		}
 		while (panelCast.getComponentCount() > 1) {
 			panelCast.remove(1);
 		}
-		for (String tagTxt : movie.getGerne()) {
+		for (String tagTxt : movie.getGenre()) {
 			createTag(tagTxt, true);
 		}
 		for (String tagTxt : movie.getCast()) {
@@ -178,7 +179,7 @@ public class MovieInfoPage extends JPanel {
 		
 		titleField = new JTextField();
 		textFieldStyle(titleField);
-		titleField.setText("Terminator");
+		titleField.setText("No Name");
 		metadata.add(titleField);
 
 
@@ -230,6 +231,7 @@ public class MovieInfoPage extends JPanel {
 		}
 
 		Box scoreStuff = Box.createHorizontalBox();
+		scoreStuff.setMinimumSize(new Dimension(300, 0));
 		scoreStuff.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
 		JPanel favButton = createFavButton();
@@ -431,7 +433,7 @@ public class MovieInfoPage extends JPanel {
 		infoArea.setOpaque(false);
 		
 		durationField = new TextField();
-		durationField.setPlaceHolder("Duration");
+		durationField.setPlaceHolder(Language.inputDuration);
 		durationField.setPlaceHolderColor(theme.applicationSecondaryFG);
 		durationField.setFont(new Font("Arial", Font.BOLD, 16));
 		durationField.setText("");
@@ -441,7 +443,7 @@ public class MovieInfoPage extends JPanel {
 		infoArea.add(verticalStrut);
 		
 		yearField = new TextField();
-		yearField.setPlaceHolder("Year");
+		yearField.setPlaceHolder(Language.inputYear);
 		yearField.setPlaceHolderColor(theme.applicationSecondaryFG);
 		yearField.setFont(new Font("Arial", Font.BOLD, 16));
 		yearField.setText("");
@@ -483,7 +485,7 @@ public class MovieInfoPage extends JPanel {
 		dateArea.setOpaque(false);
 		
 		firstWatch = new TextField();
-		firstWatch.setPlaceHolder("First Watch Date");
+		firstWatch.setPlaceHolder(Language.inputFirstWatchDate);
 		firstWatch.setPlaceHolderColor(theme.applicationSecondaryFG);
 		firstWatch.setFont(new Font("Arial", Font.BOLD, 16));
 		firstWatch.setText("");
@@ -493,7 +495,7 @@ public class MovieInfoPage extends JPanel {
 		dateArea.add(verticalStrut);
 		
 		lastWatch = new TextField();
-		lastWatch.setPlaceHolder("Last Watch Date");
+		lastWatch.setPlaceHolder(Language.inputLastWatchDate);
 		lastWatch.setPlaceHolderColor(theme.applicationSecondaryFG);
 		lastWatch.setFont(new Font("Arial", Font.BOLD, 16));
 		lastWatch.setText("");
@@ -560,21 +562,21 @@ public class MovieInfoPage extends JPanel {
 		row3.setBorder(new EmptyBorder(8, 8, 0, 4));
 //		row3.setPreferredSize(new Dimension(999, 2));
 		
-		panelGerne = new JPanel();
-		panelGerne.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelGerne.setMinimumSize(new Dimension(10, 25));
-		panelGerne.setMaximumSize(new Dimension(9999, 50));
-		panelGerne.setOpaque(false);
-		row3.add(panelGerne);
+		panelGenre = new JPanel();
+		panelGenre.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelGenre.setMinimumSize(new Dimension(10, 25));
+		panelGenre.setMaximumSize(new Dimension(9999, 50));
+		panelGenre.setOpaque(false);
+		row3.add(panelGenre);
 		
-		TextField txtGerne = new TextField();
-		txtGerne.setPlaceHolder("Gerne");
-		txtGerne.setPlaceHolderColor(theme.applicationSecondaryFG);
-		txtGerne.setHorizontalAlignment(SwingConstants.LEFT);
-		txtGerne.setFont(new Font("Arial", Font.BOLD, 16));
-		txtGerne.setColumns(5);
-		txtGerne.setText("");
-		panelGerne.add(txtGerne);
+		TextField txtGenre = new TextField();
+		txtGenre.setPlaceHolder(Language.inputGenre);
+		txtGenre.setPlaceHolderColor(theme.applicationSecondaryFG);
+		txtGenre.setHorizontalAlignment(SwingConstants.LEFT);
+		txtGenre.setFont(new Font("Arial", Font.BOLD, 16));
+		txtGenre.setColumns(5);
+		txtGenre.setText("");
+		panelGenre.add(txtGenre);
 		
 
 		panelCast = new JPanel();
@@ -586,7 +588,7 @@ public class MovieInfoPage extends JPanel {
 		row3.add(panelCast);
 		
 		TextField txtCast = new TextField();
-		txtCast.setPlaceHolder("Cast");
+		txtCast.setPlaceHolder(Language.inputCast);
 		txtCast.setPlaceHolderColor(theme.applicationSecondaryFG);
 		txtCast.setHorizontalAlignment(SwingConstants.LEFT);
 		txtCast.setFont(new Font("Arial", Font.BOLD, 16));
@@ -594,16 +596,16 @@ public class MovieInfoPage extends JPanel {
 		txtCast.setText("");
 		panelCast.add(txtCast);
 
-		txtGerne.addActionListener(new ActionListener() {
+		txtGenre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String tagTxt = txtGerne.getText();
+				String tagTxt = txtGenre.getText();
 				if (tagTxt == null || tagTxt.equals("")) return;
-				if (movie.getGerne().size() >= 4) return;
+				if (movie.getGenre().size() >= 4) return;
 				
-				movie.getGerne().add(tagTxt);
+				movie.getGenre().add(tagTxt);
 				createTag(tagTxt, true);
-				txtGerne.setText("");
-				txtGerne.requestFocus();
+				txtGenre.setText("");
+				txtGenre.requestFocus();
 			}
 		});
 		txtCast.addActionListener(new ActionListener() {
@@ -622,7 +624,7 @@ public class MovieInfoPage extends JPanel {
 		return row3;
 	}
 	
-	void createTag(String text, boolean isGerne) {
+	void createTag(String text, boolean isGenre) {
 		RoundedPanel tagContainer = new RoundedPanel(8);
 		tagContainer.setBackground(theme.buttonBG);
 		FlowLayout flowLayout_1 = (FlowLayout) tagContainer.getLayout();
@@ -640,10 +642,10 @@ public class MovieInfoPage extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() != MouseEvent.BUTTON3) return;
 
-				if (isGerne) {
-					panelGerne.remove(tagContainer);
-					movie.getGerne().remove(text);
-					panelGerne.revalidate();
+				if (isGenre) {
+					panelGenre.remove(tagContainer);
+					movie.getGenre().remove(text);
+					panelGenre.revalidate();
 				} else {
 					panelCast.remove(tagContainer);
 					movie.getCast().remove(text);
@@ -652,9 +654,9 @@ public class MovieInfoPage extends JPanel {
 			}
 		});
 		
-		if (isGerne) {
-			panelGerne.add(tagContainer);
-			panelGerne.revalidate();
+		if (isGenre) {
+			panelGenre.add(tagContainer);
+			panelGenre.revalidate();
 		} else {
 			panelCast.add(tagContainer);
 			panelCast.revalidate();
@@ -666,7 +668,7 @@ public class MovieInfoPage extends JPanel {
 		Box navPanel = Box.createHorizontalBox();
 		navPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		JButton deleteButton = new JButton("Delete");
+		JButton deleteButton = new JButton(Language.buttonDelete);
 		deleteButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -701,7 +703,7 @@ public class MovieInfoPage extends JPanel {
 		Component horizontalGlue = Box.createHorizontalGlue();
 		navPanel.add(horizontalGlue);
 		
-		JButton doneButton = new JButton("Done");
+		JButton doneButton = new JButton(Language.buttonDone);
 		doneButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		doneButton.addMouseListener(new MouseAdapter() {
 			@Override

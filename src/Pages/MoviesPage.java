@@ -26,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import MovieCard.MovieCard;
 import MovieCard.MovieInfo;
 import MovieCard.MovieStatus;
+import MovieTracker.Language;
 import MovieTracker.MovieManager;
 import MovieTracker.Theme;
 
@@ -127,7 +128,7 @@ public class MoviesPage extends JPanel {
 		Box controlBar = Box.createHorizontalBox();
 		controlBar.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		JButton watchNextButton = new JButton("Watch Next");
+		JButton watchNextButton = new JButton(Language.tabWatchNext);
 		watchNextButton.setBorder(new EmptyBorder(4, 8, 0, 8));
 		watchNextButton.setForeground(theme.applicationSecondaryFG);
 		watchNextButton.setOpaque(false);
@@ -137,7 +138,7 @@ public class MoviesPage extends JPanel {
 		watchNextButton.setFont(new Font("Arial", Font.BOLD, 16));
 		controlBar.add(watchNextButton);
 		
-		JButton listAllButton = new JButton("All Movies");
+		JButton listAllButton = new JButton(Language.tabAllMovies);
 		watchNextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		listAllButton.setOpaque(false);
 		listAllButton.setForeground(theme.applicationFG);
@@ -150,7 +151,7 @@ public class MoviesPage extends JPanel {
 		Component horizontalGlue = Box.createHorizontalGlue();
 		controlBar.add(horizontalGlue);
 		
-		JButton addMovieButton = new JButton("Add Movie");
+		JButton addMovieButton = new JButton(Language.buttonAddMovie);
 		addMovieButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		addMovieButton.addMouseListener(new MouseAdapter() {
 			@Override

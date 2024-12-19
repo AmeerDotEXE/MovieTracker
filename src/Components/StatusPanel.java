@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import MovieCard.MovieStatus;
+import MovieTracker.Language;
 import MovieTracker.Theme;
 
 public class StatusPanel extends JPanel {
@@ -55,28 +56,33 @@ public class StatusPanel extends JPanel {
 	}
 	
 	public void updateStatus(MovieStatus movieStatus) {
-		statusText.setText(movieStatus.toString());
+//		statusText.setText(movieStatus.toString());
 		
 		switch (movieStatus) {
 			default:
 				return;
 			case Needs_Review:
+				statusText.setText(Language.statusReview);
 				statusContainer.setBackground(theme.statusReview);
 				statusDot.setBackground(theme.statusReviewDot);
 				break;
 			case Might_Watch:
+				statusText.setText(Language.statusMightWatch);
 				statusContainer.setBackground(theme.statusMightWatch);
 				statusDot.setBackground(theme.statusMightWatchDot);
 				break;
 			case Want_to_Watch:
+				statusText.setText(Language.statusWantToWatch);
 				statusContainer.setBackground(theme.statusWantToWatch);
 				statusDot.setBackground(theme.statusWantToWatchDot);
 				break;
 			case Want_to_Rewatch:
+				statusText.setText(Language.statusWantToRewatch);
 				statusContainer.setBackground(theme.statusWantToRewatch);
 				statusDot.setBackground(theme.statusWantToRewatchDot);
 				break;
 			case Watched:
+				statusText.setText(Language.statusWatched);
 				statusContainer.setBackground(theme.statusWatched);
 				statusDot.setBackground(theme.statusWatchedDot);
 				break;
