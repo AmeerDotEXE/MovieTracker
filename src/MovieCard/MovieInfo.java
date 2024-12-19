@@ -10,7 +10,7 @@ public class MovieInfo {
 	private MovieStatus status = MovieStatus.Needs_Review;
 	private int rate;
 	private String lastWatched = null;
-	private ArrayList<String> gerne = new ArrayList<String>();
+	private ArrayList<String> genre = new ArrayList<String>();
 	private ArrayList<String> cast = new ArrayList<String>();
 	private String firstWatched = null;
 	private String imagePath;
@@ -32,7 +32,7 @@ public class MovieInfo {
 	public MovieStatus getStatus() { return status; }
 	public int getRate() { return rate; }
 	public String getLastWatched() { return lastWatched; }
-	public ArrayList<String> getGerne() { return gerne; }
+	public ArrayList<String> getGenre() { return genre; }
 	public ArrayList<String> getCast() { return cast; }
 	public String getFirstWatched() { return firstWatched; }
 	public String getImagePath() { return imagePath; }

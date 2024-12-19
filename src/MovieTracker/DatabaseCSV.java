@@ -60,10 +60,10 @@ public class DatabaseCSV implements Database {
 			if (cells[5] != "") movie.setRate(cells[5].length());
 			if (cells[6] != "") movie.setLastWatched(cells[6].substring(1, cells[6].length()-1));
 			if (cells[7] != "") {
-				if (!cells[7].startsWith("\"")) movie.getGerne().add(cells[7]);
+				if (!cells[7].startsWith("\"")) movie.getGenre().add(cells[7]);
 				else {
 					for (String tag : cells[7].substring(1, cells[7].length()-1).split(", ")) {
-						movie.getGerne().add(tag);
+						movie.getGenre().add(tag);
 					}
 				}
 			}
@@ -140,7 +140,7 @@ public class DatabaseCSV implements Database {
 			cells[4] = movie.getYear()+"";
 			cells[5] = "⭐⭐⭐⭐⭐⭐".substring(0, movie.getRate());
 			cells[6] = movie.getLastWatched();
-			cells[7] = ""; // Gerne
+			cells[7] = ""; // Genre
 			cells[8] = ""; // Cast
 			cells[9] = movie.getFirstWatched();
 			cells[10] = movie.getImagePath();
@@ -151,10 +151,10 @@ public class DatabaseCSV implements Database {
 			if (cells[6] == null) cells[6] = "";
 			else cells[6] = '"'+cells[6]+'"';
 
-			if (movie.getGerne().size() > 0) {
-				cells[7] = movie.getGerne().get(0);
-				if (movie.getGerne().size() > 1) {
-					cells[7] = '"'+String.join(", ", movie.getGerne())+'"';
+			if (movie.getGenre().size() > 0) {
+				cells[7] = movie.getGenre().get(0);
+				if (movie.getGenre().size() > 1) {
+					cells[7] = '"'+String.join(", ", movie.getGenre())+'"';
 				}
 			}
 			if (movie.getCast().size() > 0) {
