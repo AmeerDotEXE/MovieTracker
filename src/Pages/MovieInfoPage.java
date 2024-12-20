@@ -562,11 +562,12 @@ public class MovieInfoPage extends JPanel {
 		row3.setBorder(new EmptyBorder(8, 8, 0, 4));
 //		row3.setPreferredSize(new Dimension(999, 2));
 		
-		panelGenre = new JPanel();
+		panelGenre = new RoundedPanel(8);
+		panelGenre.setBackground(theme.cardBG);
 		panelGenre.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelGenre.setMinimumSize(new Dimension(10, 25));
+		panelGenre.setMinimumSize(new Dimension(10, 30));
 		panelGenre.setMaximumSize(new Dimension(9999, 50));
-		panelGenre.setOpaque(false);
+		panelGenre.setPreferredSize(new Dimension(10, 30));
 		row3.add(panelGenre);
 		
 		TextField txtGenre = new TextField();
@@ -578,13 +579,16 @@ public class MovieInfoPage extends JPanel {
 		txtGenre.setText("");
 		panelGenre.add(txtGenre);
 		
+		Component verticalStrut = Box.createVerticalStrut(4);
+		row3.add(verticalStrut);
+		
 
-		panelCast = new JPanel();
+		panelCast = new RoundedPanel(8);
+		panelCast.setBackground(theme.cardBG);
 		panelCast.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelCast.setMinimumSize(new Dimension(10, 25));
+		panelCast.setMinimumSize(new Dimension(10, 30));
 		panelCast.setMaximumSize(new Dimension(9999, 50));
-//		panelCast.setPreferredSize(new Dimension(10, 50));
-		panelCast.setOpaque(false);
+		panelCast.setPreferredSize(new Dimension(10, 30));
 		row3.add(panelCast);
 		
 		TextField txtCast = new TextField();
@@ -626,7 +630,7 @@ public class MovieInfoPage extends JPanel {
 	
 	void createTag(String text, boolean isGenre) {
 		RoundedPanel tagContainer = new RoundedPanel(8);
-		tagContainer.setBackground(theme.buttonBG);
+		tagContainer.setBackground(theme.applicationBG);
 		FlowLayout flowLayout_1 = (FlowLayout) tagContainer.getLayout();
 		flowLayout_1.setVgap(2);
 		flowLayout_1.setHgap(2);
@@ -634,7 +638,7 @@ public class MovieInfoPage extends JPanel {
 		JLabel tagText = new JLabel(text);
 		tagText.setBorder(new EmptyBorder(0, 2, 0, 2));
 		tagText.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		tagText.setForeground(theme.buttonFG);
+		tagText.setForeground(theme.applicationFG);
 		tagContainer.add(tagText);
 		
 		tagContainer.addMouseListener(new MouseAdapter() {
@@ -646,10 +650,12 @@ public class MovieInfoPage extends JPanel {
 					panelGenre.remove(tagContainer);
 					movie.getGenre().remove(text);
 					panelGenre.revalidate();
+					panelGenre.repaint();
 				} else {
 					panelCast.remove(tagContainer);
 					movie.getCast().remove(text);
 					panelCast.revalidate();
+					panelCast.repaint();
 				}
 			}
 		});
@@ -657,9 +663,11 @@ public class MovieInfoPage extends JPanel {
 		if (isGenre) {
 			panelGenre.add(tagContainer);
 			panelGenre.revalidate();
+			panelGenre.repaint();
 		} else {
 			panelCast.add(tagContainer);
 			panelCast.revalidate();
+			panelCast.repaint();
 		}
 	}
 	
