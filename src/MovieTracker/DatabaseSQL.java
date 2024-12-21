@@ -21,7 +21,7 @@ public class DatabaseSQL implements Database {
 		try {
 			connectDB();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Couldn't connect to database: "+DB_URL+" as "+USER);
 			e.printStackTrace();
 		}
 	}
