@@ -2,6 +2,7 @@ package MovieTracker;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
@@ -32,9 +33,13 @@ public class DatabaseSQL implements Database {
 	}
 	
 	private void initilizeTable() throws SQLException {
+		//"Favorite,Name,Movie Status,Run Time,Year,Rate,Movie Last Watched,Movie Genre,Movie Cast,Started Date,Image File,Image Position"
 	    String sqlCreate = """
+	    	DROP TABLE IF EXISTS movies;
 			CREATE TABLE IF NOT EXISTS movies (
-				name           VARCHAR(60),
+				favorite       BOOLEAN,
+				name           VARCHAR(120),
+				run_time       SMALLINT,
 				release_year   SMALLINT,
 				rate           TINYINT
 	    	);
@@ -44,9 +49,35 @@ public class DatabaseSQL implements Database {
 	    stmt.execute(sqlCreate);
 	}
 	
+	private void insertMovie(MovieInfo movie) throws SQLException {
+
+		String query = """
+			INSERT INTO movies (favorite, name, run_time, release_year, rate) 
+            VALUES (?, ?, ?, ?, ?);
+		""";
+
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setBoolean(1, movie.isFavorite());
+        preparedStmt.setString(2, movie.getName().substring(0, Math.min(120, movie.getName().length())));
+        preparedStmt.setInt(3, movie.getDurationMins());
+        preparedStmt.setInt(4, movie.getYear());
+        preparedStmt.setInt(5, movie.getRate());
+        preparedStmt.executeUpdate();
+	}
+	
 
 	public LinkedList<MovieInfo> getMovies() {
 		return movies;
+	}
+	public void updateMovie(MovieInfo movie) {
+		try {
+			insertMovie(movie);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void deleteMovie(MovieInfo movie) {
+		// not implemented
 	}
 
 	public void setMovies(LinkedList<MovieInfo> movies) {

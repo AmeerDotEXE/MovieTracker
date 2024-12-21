@@ -40,13 +40,21 @@ public class MovieManager {
 		cardsPage.add(movieCard, 0);
 		Mainframe.showMovieInfo(movieCard);
 	}
+	public void updateMovie(MovieInfo movie) {
+		db.updateMovie(movie);
+	}
 	public void saveMovies() {
 		db.setMovies(movies);
 	}
 	public void removeMovie(MovieCard movieCard) {
+		
+		// TODO: trigger save
+		
 		MovieInfo movie = movieCard.getMovie();
 		movies.remove(movie);
 		cardsPage.remove(movieCard);
+		
+		db.deleteMovie(movie);
 
         String oldFilePath = movie.getImagePath();
 		

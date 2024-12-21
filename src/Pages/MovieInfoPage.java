@@ -698,7 +698,6 @@ public class MovieInfoPage extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MovieManager.getInstance().removeMovie(movieCard);
-				MovieManager.getInstance().saveMovies();
 				Mainframe.showMoviePage();
 			}
 		});
@@ -732,7 +731,7 @@ public class MovieInfoPage extends JPanel {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MovieManager.getInstance().saveMovies();
+				MovieManager.getInstance().updateMovie(movie);
 				movieCard.updateMovieData();
 				Mainframe.showMoviePage();
 			}

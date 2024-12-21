@@ -122,6 +122,13 @@ public class DatabaseCSV implements Database {
 	}
 	
 
+	public void updateMovie(MovieInfo movie) {
+		// not implemented
+	}
+	public void deleteMovie(MovieInfo movie) {
+		// not implemented
+	}
+
 	private void saveMovies(LinkedList<MovieInfo> movies) throws IOException {
 		FileWriter fileWriter = new FileWriter(this.dataFile, false);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
