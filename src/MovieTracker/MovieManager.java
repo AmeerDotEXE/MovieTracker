@@ -17,7 +17,7 @@ public class MovieManager {
 	private LinkedList<MovieInfo> movies;
 	
 	MovieManager() {
-		db = new DatabaseCSV();
+		db = new DatabaseSQL();
 		movies = db.getMovies();
 	}
 	
