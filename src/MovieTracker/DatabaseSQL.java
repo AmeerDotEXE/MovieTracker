@@ -35,14 +35,21 @@ public class DatabaseSQL implements Database {
 	private void initilizeTable() throws SQLException {
 		//"Favorite,Name,Movie Status,Run Time,Year,Rate,Movie Last Watched,Movie Genre,Movie Cast,Started Date,Image File,Image Position"
 	    String sqlCreate = """
-	    	DROP TABLE IF EXISTS movies;
+			DROP TABLE IF EXISTS movies;
 			CREATE TABLE IF NOT EXISTS movies (
 				favorite       BOOLEAN,
 				name           VARCHAR(120),
+				status         ENUM(
+					'Review',
+					'Might Watch',
+					'Want to Watch',
+					'Want to Rewatch',
+					'Watched'
+				),
 				run_time       SMALLINT,
 				release_year   SMALLINT,
 				rate           TINYINT
-	    	);
+			);
 	    """;
 
 	    Statement stmt = conn.createStatement();
@@ -52,16 +59,17 @@ public class DatabaseSQL implements Database {
 	private void insertMovie(MovieInfo movie) throws SQLException {
 
 		String query = """
-			INSERT INTO movies (favorite, name, run_time, release_year, rate) 
-            VALUES (?, ?, ?, ?, ?);
+			INSERT INTO movies (favorite, name, status, run_time, release_year, rate) 
+            VALUES (?, ?, ?, ?, ?, ?);
 		""";
 
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setBoolean(1, movie.isFavorite());
         preparedStmt.setString(2, movie.getName().substring(0, Math.min(120, movie.getName().length())));
-        preparedStmt.setInt(3, movie.getDurationMins());
-        preparedStmt.setInt(4, movie.getYear());
-        preparedStmt.setInt(5, movie.getRate());
+        preparedStmt.setString(3, movie.getStatus().toString());
+        preparedStmt.setInt(4, movie.getDurationMins());
+        preparedStmt.setInt(5, movie.getYear());
+        preparedStmt.setInt(6, movie.getRate());
         preparedStmt.executeUpdate();
 	}
 	
