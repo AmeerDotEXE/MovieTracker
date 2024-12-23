@@ -1,5 +1,6 @@
 package MovieTracker;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,7 +36,6 @@ public class DatabaseSQL implements Database {
 	private void initilizeTable() throws SQLException {
 		//"Favorite,Name,Movie Status,Run Time,Year,Rate,Movie Last Watched,Movie Genre,Movie Cast,Started Date,Image File,Image Position"
 	    String sqlCreate = """
-			DROP TABLE IF EXISTS movies;
 			CREATE TABLE IF NOT EXISTS movies (
 				favorite       BOOLEAN,
 				name           VARCHAR(120),
@@ -48,7 +48,13 @@ public class DatabaseSQL implements Database {
 				),
 				run_time       SMALLINT,
 				release_year   SMALLINT,
-				rate           TINYINT
+				rate           TINYINT,
+				last_watch     VARCHAR(25),
+				genre          VARCHAR(120) ARRAY[4],
+				movie_cast     VARCHAR(120) ARRAY[6],
+				first_watch    VARCHAR(25),
+				image_file     VARCHAR(120),
+				image_position TINYINT
 			);
 	    """;
 
@@ -59,8 +65,8 @@ public class DatabaseSQL implements Database {
 	private void insertMovie(MovieInfo movie) throws SQLException {
 
 		String query = """
-			INSERT INTO movies (favorite, name, status, run_time, release_year, rate) 
-            VALUES (?, ?, ?, ?, ?, ?);
+			INSERT INTO movies (favorite, name, status, run_time, release_year, rate, last_watch, genre, movie_cast, first_watch, image_file, image_position) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 		""";
 
         PreparedStatement preparedStmt = conn.prepareStatement(query);
@@ -70,6 +76,21 @@ public class DatabaseSQL implements Database {
         preparedStmt.setInt(4, movie.getDurationMins());
         preparedStmt.setInt(5, movie.getYear());
         preparedStmt.setInt(6, movie.getRate());
+        preparedStmt.setString(7, movie.getLastWatched());
+
+        Array genreArray = conn.createArrayOf("VARCHAR", movie.getGenre().toArray());
+        preparedStmt.setArray(8, genreArray);
+        Array castArray = conn.createArrayOf("VARCHAR", movie.getCast().toArray());
+        preparedStmt.setArray(9, castArray);
+        
+        preparedStmt.setString(10, movie.getFirstWatched());
+
+        String imagePath = movie.getImagePath();
+		if (imagePath == null) imagePath = "";
+		else if (imagePath.startsWith("movie-images")) imagePath = imagePath.substring(13);
+        preparedStmt.setString(11, imagePath);
+
+        preparedStmt.setInt(12, movie.getImagePosition());
         preparedStmt.executeUpdate();
 	}
 	
