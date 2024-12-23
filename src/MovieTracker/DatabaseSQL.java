@@ -4,10 +4,12 @@ import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import MovieCard.MovieInfo;
+import MovieCard.MovieStatus;
 
 public class DatabaseSQL implements Database {
 	
@@ -22,6 +24,7 @@ public class DatabaseSQL implements Database {
 	DatabaseSQL() {
 		try {
 			connectDB();
+			loadMovies();
 		} catch (SQLException e) {
 			System.out.println("Couldn't connect to database: "+DB_URL+" as "+USER);
 			e.printStackTrace();
@@ -62,11 +65,41 @@ public class DatabaseSQL implements Database {
 	    stmt.execute(sqlCreate);
 	}
 	
+	private void loadMovies() throws SQLException {
+		Statement st = conn.createStatement();
+		
+		String query = """
+			SELECT * FROM movies
+		""";
+		
+		ResultSet rs = st.executeQuery(query);
+
+		while (rs.next()) {
+			MovieInfo movie = new MovieInfo(rs.getString("name"));
+			movie.setFavorite(rs.getBoolean("favorite"));
+			movie.setStatus(MovieStatus.fromString(rs.getString("status")));
+			movie.setDurationMins(rs.getInt("run_time"));
+			movie.setYear(rs.getInt("release_year"));
+			movie.setRate(rs.getInt("rate"));
+			movie.setLastWatched(rs.getString("last_watch"));
+			for (Object element : (Object[])rs.getArray("genre").getArray()) {
+				movie.getGenre().add((String)element);
+			}
+			for (Object element : (Object[])rs.getArray("movie_cast").getArray()) {
+				movie.getCast().add((String)element);
+			}
+			movie.setFirstWatched(rs.getString("first_watch"));
+			if (rs.getString("image_file") != "") movie.setImagePath("movie-images/"+rs.getString("image_file"));
+			movie.setImagePosition(rs.getInt("image_position"));
+			movies.add(movie);
+		}
+	}
+	
 	private void insertMovie(MovieInfo movie) throws SQLException {
 
 		String query = """
 			INSERT INTO movies (favorite, name, status, run_time, release_year, rate, last_watch, genre, movie_cast, first_watch, image_file, image_position) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 		""";
 
         PreparedStatement preparedStmt = conn.prepareStatement(query);

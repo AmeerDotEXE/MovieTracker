@@ -76,6 +76,7 @@ public class MovieInfo {
 
 	public void setFavorite(boolean favorite) { this.favorite = favorite; }
 	public void setName(String name) { this.name = name; }
+	public void setDurationMins(int durationMins) { this.durationMins = durationMins; }
 	public void setYear(int year) { this.year = year; }
 	public void setStatus(MovieStatus status) { this.status = status; }
 	public void setRate(int rate) { this.rate = rate; }
