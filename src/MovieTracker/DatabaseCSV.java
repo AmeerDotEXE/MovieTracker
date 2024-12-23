@@ -114,9 +114,16 @@ public class DatabaseCSV implements Database {
 	}
 	
 
+	public void addMovie(MovieInfo movie) {
+		try {
+			saveMovies(movies);
+		} catch (IOException e) {
+			System.out.println("Couldn't save in CSV format.");
+			e.printStackTrace();
+		}
+	}
 	public void updateMovie(MovieInfo movie) {
 		try {
-			if (!movies.contains(movie)) movies.add(movie);
 			saveMovies(movies);
 		} catch (IOException e) {
 			System.out.println("Couldn't save in CSV format.");
@@ -125,7 +132,6 @@ public class DatabaseCSV implements Database {
 	}
 	public void deleteMovie(MovieInfo movie) {
 		try {
-			movies.remove(movie);
 			saveMovies(movies);
 		} catch (IOException e) {
 			System.out.println("Couldn't save in CSV format.");

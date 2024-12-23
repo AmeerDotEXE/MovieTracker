@@ -91,16 +91,28 @@ public class DatabaseSQL implements Database {
 			movie.setFirstWatched(rs.getString("first_watch"));
 			if (rs.getString("image_file") != "") movie.setImagePath("movie-images/"+rs.getString("image_file"));
 			movie.setImagePosition(rs.getInt("image_position"));
-			movies.add(movie);
+			movies.addFirst(movie);
 		}
 	}
 	
-	private void insertMovie(MovieInfo movie) throws SQLException {
+	private void insertMovie(MovieInfo movie, boolean isUpdating) throws SQLException {
 
 		String query = """
 			INSERT INTO movies (favorite, name, status, run_time, release_year, rate, last_watch, genre, movie_cast, first_watch, image_file, image_position) 
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 		""";
+		
+		if (isUpdating) {
+			query = """
+				UPDATE movies
+				SET
+					favorite=?, name=?, status=?,
+					run_time=?, release_year=?, rate=?,
+					last_watch=?, genre=?, movie_cast=?,
+					first_watch=?, image_file=?, image_position=? 
+				WHERE name=?;
+			""";
+		}
 
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setBoolean(1, movie.isFavorite());
@@ -124,6 +136,34 @@ public class DatabaseSQL implements Database {
         preparedStmt.setString(11, imagePath);
 
         preparedStmt.setInt(12, movie.getImagePosition());
+        
+        if (isUpdating) {
+            preparedStmt.setString(13, movie.getName().substring(0, Math.min(120, movie.getName().length())));
+		}
+        preparedStmt.executeUpdate();
+	}
+	
+	private void renameMovieEntry(String oldName, String newName) throws SQLException {
+		String query = """
+			UPDATE movies
+			SET name=?
+			WHERE name=?;
+		""";
+
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setString(1, newName.substring(0, Math.min(120, newName.length())));
+        preparedStmt.setString(2, oldName.substring(0, Math.min(120, oldName.length())));
+        preparedStmt.executeUpdate();
+	}
+	
+	private void removeMovieEntry(MovieInfo movie) throws SQLException {
+		String query = """
+			DELETE FROM movies
+			WHERE name=?;
+		""";
+
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setString(1, movie.getName().substring(0, Math.min(120, movie.getName().length())));
         preparedStmt.executeUpdate();
 	}
 	
@@ -131,19 +171,34 @@ public class DatabaseSQL implements Database {
 	public LinkedList<MovieInfo> getMovies() {
 		return movies;
 	}
+	public void addMovie(MovieInfo movie) {
+		try {
+			insertMovie(movie, false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	public void updateMovie(MovieInfo movie) {
 		try {
-			insertMovie(movie);
+			insertMovie(movie, true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	public void deleteMovie(MovieInfo movie) {
-		// not implemented
+		try {
+			movies.remove(movie);
+			removeMovieEntry(movie);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
-	public void setMovies(LinkedList<MovieInfo> movies) {
-		// not implemented yet
+	public void renameMovie(String oldName, MovieInfo movie) {
+		try {
+			renameMovieEntry(oldName, movie.getName());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -39,6 +39,7 @@ public class MovieManager {
 		MovieCard movieCard = new MovieCard(movie);
 		cardsPage.add(movieCard, 0);
 		Mainframe.showMovieInfo(movieCard);
+		db.addMovie(movie);
 	}
 	public void updateMovie(MovieInfo movie) {
 		db.updateMovie(movie);

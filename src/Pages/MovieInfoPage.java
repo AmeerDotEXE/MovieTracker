@@ -259,8 +259,10 @@ public class MovieInfoPage extends JPanel {
 				if (newName == null) return;
 				
 				newName = newName.replaceAll(",", ".");
+				String oldName = movie.getName();
 				movie.setName(titleField.getText());
 				titleField.setText(newName);
+				MovieManager.getInstance().renameMovies(oldName, movie);
 			}
 		});
 		
