@@ -112,21 +112,33 @@ public class DatabaseCSV implements Database {
 	public LinkedList<MovieInfo> getMovies() {
 		return movies;
 	}
-
-	public void setMovies(LinkedList<MovieInfo> movies) {
-		try {
-			saveMovies(movies);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 
 	public void updateMovie(MovieInfo movie) {
-		// not implemented
+		try {
+			if (!movies.contains(movie)) movies.add(movie);
+			saveMovies(movies);
+		} catch (IOException e) {
+			System.out.println("Couldn't save in CSV format.");
+			e.printStackTrace();
+		}
 	}
 	public void deleteMovie(MovieInfo movie) {
-		// not implemented
+		try {
+			movies.remove(movie);
+			saveMovies(movies);
+		} catch (IOException e) {
+			System.out.println("Couldn't save in CSV format.");
+			e.printStackTrace();
+		}
+	}
+	public void renameMovie(String oldName, MovieInfo movie) {
+		try {
+			saveMovies(movies);
+		} catch (IOException e) {
+			System.out.println("Couldn't save in CSV format.");
+			e.printStackTrace();
+		}
 	}
 
 	private void saveMovies(LinkedList<MovieInfo> movies) throws IOException {

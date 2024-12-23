@@ -43,12 +43,10 @@ public class MovieManager {
 	public void updateMovie(MovieInfo movie) {
 		db.updateMovie(movie);
 	}
-	public void saveMovies() {
-		db.setMovies(movies);
+	public void renameMovies(String oldName, MovieInfo movie) {
+		db.renameMovie(oldName, movie);
 	}
 	public void removeMovie(MovieCard movieCard) {
-		
-		// TODO: trigger save
 		
 		MovieInfo movie = movieCard.getMovie();
 		movies.remove(movie);
