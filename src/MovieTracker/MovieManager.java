@@ -19,6 +19,15 @@ public class MovieManager {
 	MovieManager() {
 		db = new DatabaseSQL();
 		movies = db.getMovies();
+
+		// move old database to new one
+//		Database oldDB = new DatabaseCSV();
+//		for (int i = oldDB.getMovies().size() - 1; i >= 0; i--) {
+//			MovieInfo movie = oldDB.getMovies().get(i);
+//			movies.addFirst(movie);
+//			db.addMovie(movie);
+//		}
+		
 	}
 	
 	public void generateMovieCards(JPanel parent) {
