@@ -12,10 +12,13 @@ No external libraries were used for UI nor functionally.
 
 ## Highlights
 
-- CSV Storage - Your data are saved locally next to the application.
+- CSV/SQL Storage - Your data are saved locally next to the application.
 - Movie Poster - You can upload your own image and save it near the program.
 - Flexibility - Themes and Database can be replaced without affecting other systems.
 
+## Installation
+
+You can find the application in the [Releases](https://github.com/AmeerDotEXE/MovieTracker/releases/latest) section on the right side of this repo, you will need java installed for it to run. Once you get the JAR file you can run it without any setup, everything is handled from within the Program.
 
 ## Usage/Examples
 
